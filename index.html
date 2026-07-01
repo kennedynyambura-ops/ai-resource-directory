@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Working Library — AI Resource Directory</title>
+<style>
+  :root {
+    --bg:#0b1220; --text:#eef4ff; --muted:#a7b4cf; --line:rgba(255,255,255,.08);
+    --accent:#7dd3fc; --accent2:#a78bfa; --good:#86efac;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(125,211,252,.12), transparent 30%),
+      radial-gradient(circle at top right, rgba(167,139,250,.10), transparent 28%),
+      var(--bg);
+    color:var(--text);
+  }
+  .wrap { max-width:1280px; margin:0 auto; padding:32px 20px 56px; }
+  .hero {
+    border:1px solid var(--line); border-radius:24px; padding:28px;
+    background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+    box-shadow:0 24px 60px rgba(0,0,0,.24);
+  }
+  .eyebrow {
+    display:inline-flex; align-items:center; gap:8px; color:var(--accent);
+    text-transform:uppercase; letter-spacing:.12em; font-size:12px; margin-bottom:12px;
+  }
+  h1 { margin:0 0 10px; font-size:clamp(30px, 4vw, 50px); line-height:1.05; }
+  .subtitle { margin:0; max-width:980px; color:var(--muted); line-height:1.65; font-size:16px; }
+  .stats {
+    display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:12px; margin-top:20px;
+  }
+  .stat {
+    background:rgba(255,255,255,.04); border:1px solid var(--line); border-radius:18px; padding:14px 16px;
+  }
+  .stat strong { display:block; font-size:24px; margin-bottom:4px; }
+  .stat span { color:var(--muted); font-size:13px; }
+  .note { margin-top:18px; color:var(--muted); line-height:1.6; font-size:14px; }
+  .controls {
+    margin:22px 0 16px; display:grid; grid-template-columns:1.5fr .75fr .75fr; gap:12px;
+  }
+  input, select {
+    width:100%; border:1px solid var(--line); background:rgba(255,255,255,.05); color:var(--text);
+    border-radius:14px; padding:14px 15px; outline:none; font-size:15px;
+  }
+  input::placeholder { color:#9cb0d0; }
+  .chips { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:18px; }
+  .chip {
+    border:1px solid var(--line); background:rgba(125,211,252,.13); color:var(--text);
+    border-radius:999px; padding:9px 14px; font-size:13px; cursor:pointer;
+  }
+  .chip.active { background:rgba(125,211,252,.24); border-color:rgba(125,211,252,.55); }
+  .grid { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:16px; }
+  .card {
+    background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+    border:1px solid var(--line); border-radius:22px; padding:18px; min-height:240px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .card-top { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+  .code { color:var(--good); font-size:12px; letter-spacing:.08em; text-transform:uppercase; margin-bottom:5px; }
+  h3 { margin:0; font-size:22px; line-height:1.15; }
+  .tool-link { color:var(--accent); text-decoration:none; white-space:nowrap; font-size:14px; }
+  .tool-link:hover { text-decoration:underline; }
+  .category { color:var(--accent2); font-size:13px; font-weight:600; }
+  p { margin:0; color:var(--muted); line-height:1.6; font-size:14px; }
+  .mini-meta { margin-top:auto; font-size:13px; color:#cbd7ef; }
+  .hidden { display:none; }
+  .footer { margin-top:18px; color:var(--muted); font-size:13px; line-height:1.6; }
+  @media (max-width: 980px) {
+    .stats, .grid { grid-template-columns:1fr 1fr; }
+    .controls { grid-template-columns:1fr; }
+  }
+  @media (max-width: 700px) {
+    .stats, .grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow">A Working Library · AI Resource Directory</div>
+      <h1>A searchable shelf of AI tools for running a small business</h1>
+      <p class="subtitle">
+        Built for Daniel Reyes' logistics business. Search by task, or browse the category that matches the bottleneck.
+        Each entry shows the problem it solves, a concrete example, and the direct tool link.
+      </p>
+      <div class="stats">
+        <div class="stat"><strong>21</strong><span>tools in the directory</span></div>
+        <div class="stat"><strong>8</strong><span>focused categories</span></div>
+        <div class="stat"><strong>Searchable</strong><span>by task, tool, or problem</span></div>
+        <div class="stat"><strong>Practical</strong><span>built for real daily work</span></div>
+      </div>
+      <p class="note">
+        Use this as a working system, not a list. Start with inbox, follow-up, invoices, or meeting capture, then add automation and reporting once the core workflow is stable.
+      </p>
+    </section>
+
+    <section class="controls">
+      <input id="search" type="search" placeholder="Search by task — e.g. invoice, follow-up, transcription..." />
+      <select id="category">
+        <option value="all">All categories</option>
+        <option value="communication & inbox">Communication & Inbox</option>
+        <option value="client & relationship management">Client & Relationship Management</option>
+        <option value="finance & invoicing">Finance & Invoicing</option>
+        <option value="automation & workflows">Automation & Workflows</option>
+        <option value="writing & drafting">Writing & Drafting</option>
+        <option value="voice, documents & meeting capture">Voice, Documents & Meeting Capture</option>
+        <option value="reporting & dashboards">Reporting & Dashboards</option>
+        <option value="team & operations">Team & Operations</option>
+      </select>
+      <select id="sort">
+        <option value="category">Sort by category</option>
+        <option value="tool">Sort by tool</option>
+        <option value="code">Sort by code</option>
+      </select>
+    </section>
+
+    <div class="chips" id="chips">
+      <button class="chip active" data-chip="all">All</button>
+      <button class="chip" data-chip="invoice">Invoice</button>
+      <button class="chip" data-chip="follow">Follow-up</button>
+      <button class="chip" data-chip="meeting">Meeting</button>
+      <button class="chip" data-chip="report">Report</button>
+      <button class="chip" data-chip="automation">Automation</button>
+      <button class="chip" data-chip="ops">Operations</button>
+      <button class="chip" data-chip="voice">Voice</button>
+      <button class="chip" data-chip="client">Client</button>
+    </div>
+
+    <div class="grid" id="grid">
+      
+    <article class="card" data-category="communication &amp; inbox" data-code="comm-01" data-tool="gemini for gmail" data-tags="communication &amp; inbox comm-01 inbox triage &amp; priority sorting email piles up with nothing sorted by urgency. client replies and payment alerts surface first; newsletters and ccs wait — sorted automatically, every morning. gemini for gmail https://gemini.google.com/">
+      <div class="card-top">
+        <div>
+          <div class="code">COMM-01</div>
+          <h3>Inbox Triage &amp; Priority Sorting</h3>
+        </div>
+        <a class="tool-link" href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer">Gemini for Gmail →</a>
+      </div>
+      <div class="category">Communication &amp; Inbox</div>
+      <p><strong>Problem:</strong> Email piles up with nothing sorted by urgency.</p>
+      <p><strong>Example:</strong> Client replies and payment alerts surface first; newsletters and CCs wait — sorted automatically, every morning.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> Gemini for Gmail</div>
+    </article>
+    
+    <article class="card" data-category="communication &amp; inbox" data-code="comm-02" data-tool="calendly" data-tags="communication &amp; inbox comm-02 meeting scheduling booking a call turns into a dozen back-and-forth emails over time slots. send one link. the client picks a time that&#x27;s already free on your calendar — no negotiating slots by email. calendly https://calendly.com/">
+      <div class="card-top">
+        <div>
+          <div class="code">COMM-02</div>
+          <h3>Meeting Scheduling</h3>
+        </div>
+        <a class="tool-link" href="https://calendly.com/" target="_blank" rel="noopener noreferrer">Calendly →</a>
+      </div>
+      <div class="category">Communication &amp; Inbox</div>
+      <p><strong>Problem:</strong> Booking a call turns into a dozen back-and-forth emails over time slots.</p>
+      <p><strong>Example:</strong> Send one link. The client picks a time that&#x27;s already free on your calendar — no negotiating slots by email.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> Calendly</div>
+    </article>
+    
+    <article class="card" data-category="client &amp; relationship management" data-code="crm-01" data-tool="hubspot crm" data-tags="client &amp; relationship management crm-01 client follow-up automation &quot;did we follow up with that client?&quot; means checking, not knowing. a client goes quiet for a few days. the system drafts and sends a check-in, and logs that it happened. hubspot crm https://www.hubspot.com/products/crm">
+      <div class="card-top">
+        <div>
+          <div class="code">CRM-01</div>
+          <h3>Client Follow-Up Automation</h3>
+        </div>
+        <a class="tool-link" href="https://www.hubspot.com/products/crm" target="_blank" rel="noopener noreferrer">HubSpot CRM →</a>
+      </div>
+      <div class="category">Client &amp; Relationship Management</div>
+      <p><strong>Problem:</strong> &quot;Did we follow up with that client?&quot; means checking, not knowing.</p>
+      <p><strong>Example:</strong> A client goes quiet for a few days. The system drafts and sends a check-in, and logs that it happened.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> HubSpot CRM</div>
+    </article>
+    
+    <article class="card" data-category="client &amp; relationship management" data-code="crm-02" data-tool="hubspot crm" data-tags="client &amp; relationship management crm-02 centralized client hub client info is split across spreadsheets, chats, and inboxes. one search pulls up a client&#x27;s contact info, last order, last payment, and last conversation. hubspot crm https://www.hubspot.com/products/crm">
+      <div class="card-top">
+        <div>
+          <div class="code">CRM-02</div>
+          <h3>Centralized Client Hub</h3>
+        </div>
+        <a class="tool-link" href="https://www.hubspot.com/products/crm" target="_blank" rel="noopener noreferrer">HubSpot CRM →</a>
+      </div>
+      <div class="category">Client &amp; Relationship Management</div>
+      <p><strong>Problem:</strong> Client info is split across spreadsheets, chats, and inboxes.</p>
+      <p><strong>Example:</strong> One search pulls up a client&#x27;s contact info, last order, last payment, and last conversation.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> HubSpot CRM</div>
+    </article>
+    
+    <article class="card" data-category="client &amp; relationship management" data-code="crm-03" data-tool="hubspot" data-tags="client &amp; relationship management crm-03 client onboarding kits every new client starts from scratch, with no repeatable process. a new client signs on. a welcome email, rate sheet, and setup checklist go out automatically, same day. hubspot https://www.hubspot.com/">
+      <div class="card-top">
+        <div>
+          <div class="code">CRM-03</div>
+          <h3>Client Onboarding Kits</h3>
+        </div>
+        <a class="tool-link" href="https://www.hubspot.com/" target="_blank" rel="noopener noreferrer">HubSpot →</a>
+      </div>
+      <div class="category">Client &amp; Relationship Management</div>
+      <p><strong>Problem:</strong> Every new client starts from scratch, with no repeatable process.</p>
+      <p><strong>Example:</strong> A new client signs on. A welcome email, rate sheet, and setup checklist go out automatically, same day.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> HubSpot</div>
+    </article>
+    
+    <article class="card" data-category="finance &amp; invoicing" data-code="fin-01" data-tool="quickbooks online" data-tags="finance &amp; invoicing fin-01 invoice &amp; payment tracking nothing flags an overdue invoice until you go look for it. an invoice unpaid past 7 days triggers an automatic reminder and shows up on your dashboard, unprompted. quickbooks online https://quickbooks.intuit.com/online/">
+      <div class="card-top">
+        <div>
+          <div class="code">FIN-01</div>
+          <h3>Invoice &amp; Payment Tracking</h3>
+        </div>
+        <a class="tool-link" href="https://quickbooks.intuit.com/online/" target="_blank" rel="noopener noreferrer">QuickBooks Online →</a>
+      </div>
+      <div class="category">Finance &amp; Invoicing</div>
+      <p><strong>Problem:</strong> Nothing flags an overdue invoice until you go look for it.</p>
+      <p><strong>Example:</strong> An invoice unpaid past 7 days triggers an automatic reminder and shows up on your dashboard, unprompted.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> QuickBooks Online</div>
+    </article>
+    
+    <article class="card" data-category="finance &amp; invoicing" data-code="fin-02" data-tool="quickbooks" data-tags="finance &amp; invoicing fin-02 cash flow &amp; collections forecasting growth without cash flow visibility is risky. a simple 30-day forecast shows what&#x27;s coming in and going out, so a slow month doesn&#x27;t catch you off guard. quickbooks https://quickbooks.intuit.com/">
+      <div class="card-top">
+        <div>
+          <div class="code">FIN-02</div>
+          <h3>Cash Flow &amp; Collections Forecasting</h3>
+        </div>
+        <a class="tool-link" href="https://quickbooks.intuit.com/" target="_blank" rel="noopener noreferrer">QuickBooks →</a>
+      </div>
+      <div class="category">Finance &amp; Invoicing</div>
+      <p><strong>Problem:</strong> Growth without cash flow visibility is risky.</p>
+      <p><strong>Example:</strong> A simple 30-day forecast shows what&#x27;s coming in and going out, so a slow month doesn&#x27;t catch you off guard.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> QuickBooks</div>
+    </article>
+    
+    <article class="card" data-category="finance &amp; invoicing" data-code="fin-03" data-tool="bill.com" data-tags="finance &amp; invoicing fin-03 bill pay &amp; vendor invoice automation paying vendors and matching subcontractor invoices eats hours every week. vendor invoices are captured, matched to a po, and queued for approval automatically — approve from a phone in seconds. bill.com https://www.bill.com/">
+      <div class="card-top">
+        <div>
+          <div class="code">FIN-03</div>
+          <h3>Bill Pay &amp; Vendor Invoice Automation</h3>
+        </div>
+        <a class="tool-link" href="https://www.bill.com/" target="_blank" rel="noopener noreferrer">Bill.com →</a>
+      </div>
+      <div class="category">Finance &amp; Invoicing</div>
+      <p><strong>Problem:</strong> Paying vendors and matching subcontractor invoices eats hours every week.</p>
+      <p><strong>Example:</strong> Vendor invoices are captured, matched to a PO, and queued for approval automatically — approve from a phone in seconds.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> Bill.com</div>
+    </article>
+    
+    <article class="card" data-category="automation &amp; workflows" data-code="auto-01" data-tool="zapier" data-tags="automation &amp; workflows auto-01 automated reminders &amp; nudges tasks fall through the cracks between spreadsheets, chat, and email. anything untouched for a couple of days sends one consolidated nudge — not five separate app notifications. zapier https://zapier.com/">
+      <div class="card-top">
+        <div>
+          <div class="code">AUTO-01</div>
+          <h3>Automated Reminders &amp; Nudges</h3>
+        </div>
+        <a class="tool-link" href="https://zapier.com/" target="_blank" rel="noopener noreferrer">Zapier →</a>
+      </div>
+      <div class="category">Automation &amp; Workflows</div>
+      <p><strong>Problem:</strong> Tasks fall through the cracks between spreadsheets, chat, and email.</p>
+      <p><strong>Example:</strong> Anything untouched for a couple of days sends one consolidated nudge — not five separate app notifications.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> Zapier</div>
+    </article>
+    
+    <article class="card" data-category="automation &amp; workflows" data-code="auto-02" data-tool="zapier" data-tags="automation &amp; workflows auto-02 tool consolidation inconsistent use of separate apps means nothing stays current. quick chats stay in chat, but anything important gets logged into the client hub automatically — one source of truth. zapier https://zapier.com/">
+      <div class="card-top">
+        <div>
+          <div class="code">AUTO-02</div>
+          <h3>Tool Consolidation</h3>
+        </div>
+        <a class="tool-link" href="https://zapier.com/" target="_blank" rel="noopener noreferrer">Zapier →</a>
+      </div>
+      <div class="category">Automation &amp; Workflows</div>
+      <p><strong>Problem:</strong> Inconsistent use of separate apps means nothing stays current.</p>
+      <p><strong>Example:</strong> Quick chats stay in chat, but anything important gets logged into the client hub automatically — one source of truth.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> Zapier</div>
+    </article>
+    
+    <article class="card" data-category="writing &amp; drafting" data-code="write-01" data-tool="claude" data-tags="writing &amp; drafting write-01 late-payment collections support chasing payments is awkward and eats time. ai drafts a firm-but-friendly payment reminder in your voice. you approve, it sends — no blank page. claude https://claude.ai/">
+      <div class="card-top">
+        <div>
+          <div class="code">WRITE-01</div>
+          <h3>Late-Payment Collections Support</h3>
+        </div>
+        <a class="tool-link" href="https://claude.ai/" target="_blank" rel="noopener noreferrer">Claude →</a>
+      </div>
+      <div class="category">Writing &amp; Drafting</div>
+      <p><strong>Problem:</strong> Chasing payments is awkward and eats time.</p>
+      <p><strong>Example:</strong> AI drafts a firm-but-friendly payment reminder in your voice. You approve, it sends — no blank page.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> Claude</div>
+    </article>
+    
+    <article class="card" data-category="writing &amp; drafting" data-code="write-02" data-tool="claude" data-tags="writing &amp; drafting write-02 weekly snapshot reporting you want outcomes, not a pile of data to interpret. once a week: one short paragraph — what shipped, what&#x27;s overdue, what needs a decision. nothing more. claude https://claude.ai/">
+      <div class="card-top">
+        <div>
+          <div class="code">WRITE-02</div>
+          <h3>Weekly Snapshot Reporting</h3>
+        </div>
+        <a class="tool-link" href="https://claude.ai/" target="_blank" rel="noopener noreferrer">Claude →</a>
+      </div>
+      <div class="category">Writing &amp; Drafting</div>
+      <p><strong>Problem:</strong> You want outcomes, not a pile of data to interpret.</p>
+      <p><strong>Example:</strong> Once a week: one short paragraph — what shipped, what&#x27;s overdue, what needs a decision. Nothing more.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> Claude</div>
+    </article>
+    
+    <article class="card" data-category="writing &amp; drafting" data-code="write-03" data-tool="claude" data-tags="writing &amp; drafting write-03 meeting prep briefs walking into a client call cold wastes time. minutes before a call: a one-line brief — who this client is, what&#x27;s outstanding, what they last asked for. claude https://claude.ai/">
+      <div class="card-top">
+        <div>
+          <div class="code">WRITE-03</div>
+          <h3>Meeting Prep Briefs</h3>
+        </div>
+        <a class="tool-link" href="https://claude.ai/" target="_blank" rel="noopener noreferrer">Claude →</a>
+      </div>
+      <div class="category">Writing &amp; Drafting</div>
+      <p><strong>Problem:</strong> Walking into a client call cold wastes time.</p>
+      <p><strong>Example:</strong> Minutes before a call: a one-line brief — who this client is, what&#x27;s outstanding, what they last asked for.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> Claude</div>
+    </article>
+    
+    <article class="card" data-category="writing &amp; drafting" data-code="write-04" data-tool="claude" data-tags="writing &amp; drafting write-04 vendor &amp; carrier communication drafting routine emails to vendors and carriers eat time that should go to growth. an issue comes up — ai drafts the email to the vendor, you review and send in under a minute. claude https://claude.ai/">
+      <div class="card-top">
+        <div>
+          <div class="code">WRITE-04</div>
+          <h3>Vendor &amp; Carrier Communication Drafting</h3>
+        </div>
+        <a class="tool-link" href="https://claude.ai/" target="_blank" rel="noopener noreferrer">Claude →</a>
+      </div>
+      <div class="category">Writing &amp; Drafting</div>
+      <p><strong>Problem:</strong> Routine emails to vendors and carriers eat time that should go to growth.</p>
+      <p><strong>Example:</strong> An issue comes up — AI drafts the email to the vendor, you review and send in under a minute.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> Claude</div>
+    </article>
+    
+    <article class="card" data-category="voice, documents &amp; meeting capture" data-code="cap-01" data-tool="dext" data-tags="voice, documents &amp; meeting capture cap-01 document processing paperwork like receipts and delivery slips gets typed in by hand. snap a photo of a proof-of-delivery slip. it&#x27;s read and logged into your records automatically. dext https://dext.com/">
+      <div class="card-top">
+        <div>
+          <div class="code">CAP-01</div>
+          <h3>Document Processing</h3>
+        </div>
+        <a class="tool-link" href="https://dext.com/" target="_blank" rel="noopener noreferrer">Dext →</a>
+      </div>
+      <div class="category">Voice, Documents &amp; Meeting Capture</div>
+      <p><strong>Problem:</strong> Paperwork like receipts and delivery slips gets typed in by hand.</p>
+      <p><strong>Example:</strong> Snap a photo of a proof-of-delivery slip. It&#x27;s read and logged into your records automatically.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> Dext</div>
+    </article>
+    
+    <article class="card" data-category="voice, documents &amp; meeting capture" data-code="cap-02" data-tool="superwhisper" data-tags="voice, documents &amp; meeting capture cap-02 voice capture on-the-go good ideas happen mid-drive or mid-call, then get forgotten. record a short voice note between calls. it&#x27;s transcribed and turned into a task without touching a keyboard. superwhisper https://superwhisper.com/">
+      <div class="card-top">
+        <div>
+          <div class="code">CAP-02</div>
+          <h3>Voice Capture On-the-Go</h3>
+        </div>
+        <a class="tool-link" href="https://superwhisper.com/" target="_blank" rel="noopener noreferrer">superwhisper →</a>
+      </div>
+      <div class="category">Voice, Documents &amp; Meeting Capture</div>
+      <p><strong>Problem:</strong> Good ideas happen mid-drive or mid-call, then get forgotten.</p>
+      <p><strong>Example:</strong> Record a short voice note between calls. It&#x27;s transcribed and turned into a task without touching a keyboard.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> superwhisper</div>
+    </article>
+    
+    <article class="card" data-category="voice, documents &amp; meeting capture" data-code="cap-03" data-tool="otter.ai" data-tags="voice, documents &amp; meeting capture cap-03 call &amp; meeting notes details from calls get lost or misremembered. a client call is recorded and summarized automatically — decisions land in a task list, not just memory. otter.ai https://otter.ai/">
+      <div class="card-top">
+        <div>
+          <div class="code">CAP-03</div>
+          <h3>Call &amp; Meeting Notes</h3>
+        </div>
+        <a class="tool-link" href="https://otter.ai/" target="_blank" rel="noopener noreferrer">Otter.ai →</a>
+      </div>
+      <div class="category">Voice, Documents &amp; Meeting Capture</div>
+      <p><strong>Problem:</strong> Details from calls get lost or misremembered.</p>
+      <p><strong>Example:</strong> A client call is recorded and summarized automatically — decisions land in a task list, not just memory.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> Otter.ai</div>
+    </article>
+    
+    <article class="card" data-category="reporting &amp; dashboards" data-code="data-01" data-tool="google sheets + gemini" data-tags="reporting &amp; dashboards data-01 shipment &amp; order status updates &quot;what&#x27;s pending?&quot; means manual digging today. a live board shows every order — pending, in transit, delivered — updated automatically instead of chased down. google sheets + gemini https://workspace.google.com/products/sheets/">
+      <div class="card-top">
+        <div>
+          <div class="code">DATA-01</div>
+          <h3>Shipment &amp; Order Status Updates</h3>
+        </div>
+        <a class="tool-link" href="https://workspace.google.com/products/sheets/" target="_blank" rel="noopener noreferrer">Google Sheets + Gemini →</a>
+      </div>
+      <div class="category">Reporting &amp; Dashboards</div>
+      <p><strong>Problem:</strong> &quot;What&#x27;s pending?&quot; means manual digging today.</p>
+      <p><strong>Example:</strong> A live board shows every order — pending, in transit, delivered — updated automatically instead of chased down.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> Google Sheets + Gemini</div>
+    </article>
+    
+    <article class="card" data-category="reporting &amp; dashboards" data-code="data-02" data-tool="looker studio" data-tags="reporting &amp; dashboards data-02 simple kpi dashboard no easy way to see the business at a glance. one screen: revenue this month, outstanding invoices, active jobs. no spreadsheet hunting before a decision. looker studio https://lookerstudio.google.com/">
+      <div class="card-top">
+        <div>
+          <div class="code">DATA-02</div>
+          <h3>Simple KPI Dashboard</h3>
+        </div>
+        <a class="tool-link" href="https://lookerstudio.google.com/" target="_blank" rel="noopener noreferrer">Looker Studio →</a>
+      </div>
+      <div class="category">Reporting &amp; Dashboards</div>
+      <p><strong>Problem:</strong> No easy way to see the business at a glance.</p>
+      <p><strong>Example:</strong> One screen: revenue this month, outstanding invoices, active jobs. No spreadsheet hunting before a decision.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> Looker Studio</div>
+    </article>
+    
+    <article class="card" data-category="team &amp; operations" data-code="ops-01" data-tool="motion" data-tags="team &amp; operations ops-01 task &amp; priority triage for the team as a team grows, work needs assigning without more meetings. incoming requests get sorted and routed to the right person automatically, with priority already flagged. motion https://www.usemotion.com/">
+      <div class="card-top">
+        <div>
+          <div class="code">OPS-01</div>
+          <h3>Task &amp; Priority Triage for the Team</h3>
+        </div>
+        <a class="tool-link" href="https://www.usemotion.com/" target="_blank" rel="noopener noreferrer">Motion →</a>
+      </div>
+      <div class="category">Team &amp; Operations</div>
+      <p><strong>Problem:</strong> As a team grows, work needs assigning without more meetings.</p>
+      <p><strong>Example:</strong> Incoming requests get sorted and routed to the right person automatically, with priority already flagged.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> Motion</div>
+    </article>
+    
+    <article class="card" data-category="team &amp; operations" data-code="ops-02" data-tool="tango" data-tags="team &amp; operations ops-02 team onboarding &amp; sop creation know-how lives in one person&#x27;s head; hiring means retraining from scratch. record a task once. ai turns it into a step-by-step guide new hires can follow without asking. tango https://www.tango.us/">
+      <div class="card-top">
+        <div>
+          <div class="code">OPS-02</div>
+          <h3>Team Onboarding &amp; SOP Creation</h3>
+        </div>
+        <a class="tool-link" href="https://www.tango.us/" target="_blank" rel="noopener noreferrer">Tango →</a>
+      </div>
+      <div class="category">Team &amp; Operations</div>
+      <p><strong>Problem:</strong> Know-how lives in one person&#x27;s head; hiring means retraining from scratch.</p>
+      <p><strong>Example:</strong> Record a task once. AI turns it into a step-by-step guide new hires can follow without asking.</p>
+      <div class="mini-meta"><strong>Tool focus:</strong> Tango</div>
+    </article>
+    
+    </div>
+
+    <p class="footer">
+      Everything here is designed to sit on top of the tools Daniel already uses. The goal is not replacement — it is faster replies, clearer follow-through, cleaner invoicing, and less context lost across email, sheets, and WhatsApp.
+    </p>
+  </main>
+
+<script>
+  const cards = [...document.querySelectorAll('.card')];
+  const search = document.getElementById('search');
+  const category = document.getElementById('category');
+  const sort = document.getElementById('sort');
+  const grid = document.getElementById('grid');
+  const chips = [...document.querySelectorAll('.chip')];
+  let activeChip = 'all';
+
+  function normalize(s) { return (s || '').toLowerCase(); }
+
+  function matches(card) {
+    const q = normalize(search.value).trim();
+    const cat = category.value;
+    const text = normalize(card.innerText + ' ' + card.dataset.tags);
+    const catMatch = cat === 'all' || card.dataset.category === cat;
+    const searchMatch = !q || text.includes(q);
+    const chipMatch = activeChip === 'all' || text.includes(activeChip);
+    return catMatch && searchMatch && chipMatch;
+  }
+
+  function applyFilter() {
+    cards.forEach(c => c.classList.toggle('hidden', !matches(c)));
+  }
+
+  function applySort() {
+    const key = sort.value;
+    const sorted = [...cards].sort((a, b) => {
+      const av = a.dataset[key] || '';
+      const bv = b.dataset[key] || '';
+      return av.localeCompare(bv);
+    });
+    sorted.forEach(c => grid.appendChild(c));
+  }
+
+  search.addEventListener('input', applyFilter);
+  category.addEventListener('change', applyFilter);
+  sort.addEventListener('change', () => { applySort(); applyFilter(); });
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      activeChip = chip.dataset.chip;
+      applyFilter();
+    });
+  });
+
+  applySort();
+  applyFilter();
+</script>
+</body>
+</html>
