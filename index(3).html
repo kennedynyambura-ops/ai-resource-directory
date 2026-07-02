@@ -1,0 +1,1889 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reyes Logistics · Business Command Center Pro</title>
+<style>
+  :root{
+    --bg:#07111f;
+    --bg2:#0b1730;
+    --panel:#0f1d36;
+    --panel2:#122343;
+    --card:#0f1b33;
+    --line:rgba(148,163,184,.16);
+    --line2:rgba(148,163,184,.22);
+    --text:#e7eefc;
+    --muted:#9db0cf;
+    --muted2:#7d90b1;
+    --blue:#5aa7ff;
+    --blue2:#7c6cff;
+    --blue3:#33c3ff;
+    --good:#22c55e;
+    --warn:#f59e0b;
+    --bad:#ef4444;
+    --shadow:0 20px 50px rgba(0,0,0,.32);
+    --shadow2:0 10px 25px rgba(0,0,0,.24);
+    --radius:24px;
+  }
+  *{box-sizing:border-box}
+  html,body{
+    margin:0;padding:0;
+    background:
+      radial-gradient(circle at top left, rgba(90,167,255,.20), transparent 28%),
+      radial-gradient(circle at top right, rgba(124,108,255,.14), transparent 25%),
+      linear-gradient(180deg, var(--bg) 0%, #091426 100%);
+    color:var(--text);
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  }
+  a{color:inherit}
+  .wrap{max-width:1440px;margin:0 auto;padding:26px 18px 50px}
+  .hero{
+    background:linear-gradient(135deg, rgba(90,167,255,.22), rgba(124,108,255,.16) 44%, rgba(19,40,74,.98));
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:var(--shadow);
+    border-radius:32px;
+    padding:26px;
+    overflow:hidden;
+    position:relative;
+  }
+  .hero:after{
+    content:"";
+    position:absolute; inset:auto -50px -80px auto;
+    width:240px;height:240px;border-radius:50%;
+    background:radial-gradient(circle, rgba(51,195,255,.35), transparent 68%);
+    filter:blur(6px);
+    pointer-events:none;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:7px 12px;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:999px;
+    background:rgba(255,255,255,.06);
+    color:#d9e7ff;
+    font-size:12px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  h1{margin:0;font-size:clamp(30px,4.2vw,54px);line-height:1.02;letter-spacing:-.03em}
+  .sub{max-width:1020px;margin:12px 0 0;color:#d5e2fb;line-height:1.7;font-size:15px}
+  .hero-grid{display:grid;grid-template-columns:1.6fr .95fr;gap:16px;margin-top:20px}
+  .hero-note{
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(7,17,31,.34);
+    border-radius:26px;
+    padding:18px;
+    backdrop-filter: blur(8px);
+  }
+  .hero-note h3{margin:0 0 10px;font-size:14px;text-transform:uppercase;letter-spacing:.12em;color:#d9e7ff}
+  .hero-note p{margin:0;color:#d5e2fb;line-height:1.65;font-size:14px}
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+  .chip{
+    border:1px solid rgba(255,255,255,.15);
+    background:rgba(255,255,255,.08);
+    color:#eef5ff;
+    padding:10px 14px;
+    border-radius:999px;
+    font-size:13px;
+  }
+  .chip strong{color:white}
+  .toprow{
+    display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;
+    margin-top:16px;
+  }
+  .stat{
+    border-radius:24px;
+    border:1px solid var(--line2);
+    background:linear-gradient(180deg, rgba(17,35,67,.88), rgba(13,25,48,.88));
+    padding:16px;
+    box-shadow:var(--shadow2);
+  }
+  .stat .label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .stat .value{font-size:28px;font-weight:800;margin-top:8px;letter-spacing:-.03em}
+  .stat .foot{font-size:12px;color:var(--muted2);margin-top:6px;line-height:1.4}
+  .nav{
+    position:sticky;top:0;z-index:25;
+    margin:16px 0 0;
+    padding:12px 0;
+    background:linear-gradient(180deg, rgba(7,17,31,.94), rgba(7,17,31,.72));
+    backdrop-filter: blur(10px);
+    border-bottom:1px solid rgba(255,255,255,.05);
+  }
+  .nav-inner{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center}
+  .navbtn{
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:var(--text);
+    padding:11px 16px;
+    border-radius:999px;
+    font-size:13px;
+    cursor:pointer;
+    transition:.16s ease;
+  }
+  .navbtn:hover{transform:translateY(-1px);border-color:rgba(90,167,255,.55)}
+  .navbtn.active{background:linear-gradient(135deg, rgba(90,167,255,.28), rgba(124,108,255,.22));border-color:rgba(90,167,255,.65)}
+  .panel{display:none;margin-top:18px}
+  .panel.active{display:block}
+  .grid{display:grid;grid-template-columns:1.42fr .98fr;gap:16px;align-items:start}
+  .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+  .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+  .card{
+    background:linear-gradient(180deg, rgba(18,35,67,.96), rgba(10,21,40,.96));
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px;
+    box-shadow:var(--shadow2);
+  }
+  .card h2{
+    margin:0 0 12px;
+    font-size:20px;
+    letter-spacing:-.02em;
+    display:flex;align-items:center;gap:10px
+  }
+  .card .hint{margin:0 0 12px;color:var(--muted);line-height:1.6;font-size:13px}
+  .field{margin-bottom:14px}
+  .field label{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:#d7e4fb;font-weight:600;margin-bottom:6px}
+  .field .val{font-size:12px;color:#8cc3ff;font-weight:700}
+  .field input[type="number"], .field input[type="text"], .field input[type="date"], .field input[type="month"], .field select{
+    width:100%;
+    border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.06);
+    color:var(--text);
+    border-radius:14px;
+    padding:11px 12px;
+    outline:none;
+    font-size:14px;
+  }
+  .field input:focus,.field select:focus{border-color:rgba(90,167,255,.75);box-shadow:0 0 0 3px rgba(90,167,255,.12)}
+  .field input[type="range"]{width:100%;accent-color:var(--blue)}
+  .desc{margin-top:6px;font-size:12px;color:var(--muted2);line-height:1.45}
+  .metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .metric{
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(255,255,255,.04);
+    border-radius:18px;
+    padding:14px;
+  }
+  .metric .m-label{font-size:12px;color:var(--muted)}
+  .metric .m-val{font-size:23px;font-weight:800;margin-top:6px;letter-spacing:-.02em}
+  .metric .m-sub{font-size:12px;color:var(--muted2);margin-top:4px;line-height:1.4}
+  .metric .good{color:var(--good)}
+  .metric .bad{color:#fb7185}
+  .metric .warn{color:var(--warn)}
+  .pill-row{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 14px}
+  .pill{
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.05);
+    color:var(--text);
+    border-radius:999px;
+    padding:8px 12px;
+    font-size:12px;
+    cursor:pointer;
+  }
+  .pill.active{background:rgba(90,167,255,.22);border-color:rgba(90,167,255,.5)}
+  .subtabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+  .subtab{
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.05);
+    color:var(--text);
+    border-radius:999px;
+    padding:9px 14px;
+    font-size:12px;
+    cursor:pointer;
+  }
+  .subtab.active{background:linear-gradient(135deg, rgba(90,167,255,.28), rgba(124,108,255,.22));border-color:rgba(90,167,255,.7)}
+  .subpanel{display:none}
+  .subpanel.active{display:block}
+  .btn-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+  .btn{
+    border:none;
+    background:linear-gradient(135deg, #5aa7ff, #7c6cff);
+    color:white;
+    padding:11px 16px;
+    border-radius:14px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 10px 24px rgba(90,167,255,.22);
+  }
+  .btn.secondary{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:none;
+  }
+  .btn.ghost{
+    background:transparent;
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:none;
+  }
+  .btn:hover{filter:brightness(1.05)}
+  .callout{
+    margin-top:14px;
+    border:1px solid rgba(90,167,255,.25);
+    background:linear-gradient(135deg, rgba(90,167,255,.12), rgba(124,108,255,.08));
+    border-radius:18px;
+    padding:14px;
+    color:#dce9ff;
+    line-height:1.55;
+    font-size:13px;
+  }
+  .warncall{
+    border-color:rgba(245,158,11,.26);
+    background:linear-gradient(135deg, rgba(245,158,11,.14), rgba(239,68,68,.08));
+  }
+  .table-wrap{
+    overflow:auto;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.09);
+    margin-top:12px;
+    background:rgba(255,255,255,.03);
+  }
+  table{width:100%;border-collapse:collapse;min-width:760px}
+  thead th{
+    text-align:left;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--muted);
+    background:rgba(255,255,255,.04);
+    padding:12px 10px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  tbody td{
+    padding:11px 10px;
+    border-bottom:1px solid rgba(255,255,255,.06);
+    font-size:13px;
+    color:#e7eefc;
+  }
+  tbody tr:hover{background:rgba(255,255,255,.03)}
+  .amt-income{color:#64e7a2;font-weight:800}
+  .amt-expense{color:#ff8ea3;font-weight:800}
+  .del{
+    border:none;background:transparent;color:var(--muted);cursor:pointer;font-size:16px;padding:0 6px
+  }
+  .del:hover{color:#ff8ea3}
+  .empty{
+    text-align:center;
+    color:var(--muted2);
+    font-style:italic;
+    padding:18px 0;
+  }
+  .canvas-card{
+    margin-top:16px;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:16px;
+  }
+  .chart{
+    padding:16px;
+  }
+  .chart h3{
+    margin:0 0 8px;
+    font-size:14px;
+    text-transform:uppercase;
+    letter-spacing:.11em;
+    color:#d9e7ff;
+  }
+  canvas{
+    width:100%;
+    height:240px;
+    border-radius:18px;
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.08);
+  }
+  .insights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .insight{
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:18px;
+    background:rgba(255,255,255,.04);
+    padding:14px;
+    min-height:116px;
+  }
+  .insight .k{font-size:12px;color:#9eb4d8;text-transform:uppercase;letter-spacing:.08em}
+  .insight .v{margin-top:8px;font-size:14px;line-height:1.55;color:#e7eefc}
+  .disclaimer{
+    border:1px solid rgba(245,158,11,.2);
+    background:linear-gradient(135deg, rgba(245,158,11,.12), rgba(255,255,255,.03));
+    border-radius:18px;
+    padding:14px;
+    color:#e8eefb;
+    line-height:1.55;
+    font-size:13px;
+  }
+  .progress{
+    margin-top:10px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:999px;
+    overflow:hidden;
+    height:12px;
+  }
+  .bar{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, #5aa7ff, #7c6cff);
+  }
+  .smallmuted{font-size:12px;color:var(--muted2);line-height:1.5}
+  .footer{
+    margin-top:18px;
+    color:var(--muted2);
+    font-size:12px;
+    line-height:1.6;
+    text-align:center;
+    padding-bottom:10px;
+  }
+  .hide{display:none!important}
+  .linkrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+  .linkrow button{padding:8px 12px;border-radius:999px}
+  .kpi-list{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+  .kpi{padding:14px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+  .kpi .a{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+  .kpi .b{font-size:24px;font-weight:800;margin-top:6px}
+  .kpi .c{font-size:12px;color:var(--muted2);margin-top:4px;line-height:1.4}
+  @media (max-width: 1180px){
+    .hero-grid,.grid,.grid-3,.canvas-card,.insights,.toprow,.grid-2,.kpi-list{grid-template-columns:1fr}
+    .table-wrap table{min-width:640px}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="eyebrow">Reyes Logistics · Business Command Center Pro</div>
+      <h1>Premium business dashboard for revenue, payroll, invoices, and tax planning</h1>
+      <p class="sub">Built for Daniel Reyes: a fast, clear operating view with calculators, transaction tracking, invoice aging, client follow-ups, goal progress, and practical business insight cards.</p>
+
+      <div class="hero-grid">
+        <div>
+          <div class="chips">
+            <div class="chip"><strong>Dashboard</strong> with KPIs and charts</div>
+            <div class="chip"><strong>Calculators</strong> for revenue, ROI, commission, savings</div>
+            <div class="chip"><strong>Tracker</strong> for transactions, payroll, invoices</div>
+            <div class="chip"><strong>Advisor</strong> with plain-language insights</div>
+          </div>
+        </div>
+        <div class="hero-note">
+          <h3>Fast read</h3>
+          <p id="hero-summary">Log one transaction and the dashboard updates automatically. The goal is to keep the business simple: know what is coming in, what is going out, what is owed, and what needs attention today.</p>
+        </div>
+      </div>
+
+      <div class="toprow">
+        <div class="stat">
+          <div class="label">Monthly revenue</div>
+          <div class="value" id="statRevenue">$0</div>
+          <div class="foot">Logged income from the tracker</div>
+        </div>
+        <div class="stat">
+          <div class="label">Net profit</div>
+          <div class="value" id="statProfit">$0</div>
+          <div class="foot">Revenue minus expenses and payroll</div>
+        </div>
+        <div class="stat">
+          <div class="label">Invoices pending</div>
+          <div class="value" id="statPending">0</div>
+          <div class="foot">Open and overdue invoices</div>
+        </div>
+        <div class="stat">
+          <div class="label">Tax reserve</div>
+          <div class="value" id="statTax">$0</div>
+          <div class="foot">Suggested amount to set aside</div>
+        </div>
+        <div class="stat">
+          <div class="label">Cash available</div>
+          <div class="value" id="statCash">$0</div>
+          <div class="foot">What is left after reserve</div>
+        </div>
+        <div class="stat">
+          <div class="label">QuickBooks sync</div>
+          <div class="value" id="statQB">Ready</div>
+          <div class="foot">Prototype integration status</div>
+        </div>
+      </div>
+    </section>
+
+    <nav class="nav">
+      <div class="nav-inner">
+        <button class="navbtn active" data-panel="dashboard">Dashboard</button>
+        <button class="navbtn" data-panel="calculators">Calculators</button>
+        <button class="navbtn" data-panel="tracker">Finance Tracker</button>
+        <button class="navbtn" data-panel="quickbooks">QuickBooks Integration</button>
+        <button class="navbtn" data-panel="advisor">AI Advisor</button>
+        <button class="navbtn" data-panel="crm">Client CRM</button>
+        <button class="navbtn" data-panel="goals">Goals & Calendar</button>
+        <button class="navbtn" data-panel="tax">Tax Planner</button>
+      </div>
+    </nav>
+
+    <!-- Dashboard -->
+    <section class="panel active" id="panel-dashboard">
+      <div class="card">
+        <h2>Executive KPIs</h2>
+        <p class="hint">A quick snapshot Daniel can read in seconds.</p>
+        <div class="kpi-list">
+          <div class="kpi"><div class="a">Revenue</div><div class="b" id="dashRevenue">$0</div><div class="c">Logged income this period</div></div>
+          <div class="kpi"><div class="a">Expenses + Payroll</div><div class="b" id="dashCost">$0</div><div class="c">All money out</div></div>
+          <div class="kpi"><div class="a">Net Profit</div><div class="b" id="dashNet">$0</div><div class="c">After tracked costs</div></div>
+          <div class="kpi"><div class="a">Tax Reserve</div><div class="b" id="dashTax">$0</div><div class="c">Planning reserve only</div></div>
+          <div class="kpi"><div class="a">Open Invoices</div><div class="b" id="dashOpenInv">0</div><div class="c">Pending + overdue</div></div>
+        </div>
+
+        <div class="canvas-card">
+          <div class="card chart">
+            <h3>Cash Mix</h3>
+            <canvas id="mixChart" width="460" height="260"></canvas>
+          </div>
+          <div class="card chart">
+            <h3>Revenue Projection</h3>
+            <canvas id="projectionChart" width="460" height="260"></canvas>
+          </div>
+          <div class="card chart">
+            <h3>Tax Reserve Gauge</h3>
+            <canvas id="gaugeChart" width="460" height="260"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:16px;">
+        <div class="card">
+          <h2>AI Business Insights</h2>
+          <p class="hint">Short, practical observations Daniel can act on.</p>
+          <div class="insights">
+            <div class="insight">
+              <div class="k">What changed</div>
+              <div class="v" id="insight1">Log activity to generate a summary.</div>
+            </div>
+            <div class="insight">
+              <div class="k">Cash pressure</div>
+              <div class="v" id="insight2">This will flag invoices, payroll, and reserve pressure.</div>
+            </div>
+            <div class="insight">
+              <div class="k">Next move</div>
+              <div class="v" id="insight3">Add a transaction, then review tax reserve and cash available.</div>
+            </div>
+          </div>
+          <div class="callout" id="dashCallout"><b>Working note:</b> Keep the focus on the next action — follow up on receipts, collect overdue invoices, and protect the tax reserve before spending cash.</div>
+        </div>
+
+        <div class="card">
+          <h2>Today’s Action List</h2>
+          <p class="hint">A simple queue for the day.</p>
+          <div id="actionList"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Calculators -->
+    <section class="panel" id="panel-calculators">
+      <div class="subtabs">
+        <button class="subtab active" data-calctab="revenue">Revenue</button>
+        <button class="subtab" data-calctab="roi">ROI</button>
+        <button class="subtab" data-calctab="commission">Commission</button>
+        <button class="subtab" data-calctab="savings">Savings</button>
+      </div>
+
+      <div class="subpanel active" id="calc-revenue">
+        <div class="grid">
+          <div class="card">
+            <h2>Revenue Projection</h2>
+            <p class="hint">Estimate monthly and annual revenue at current pace, then test growth.</p>
+            <div class="field"><label>Loads / shipments per month <span class="val" id="vLoads">40</span></label><input type="range" id="loads" min="1" max="300" value="40"></div>
+            <div class="field"><label>Average revenue per load <span class="val" id="vAvg">$850</span></label><input type="range" id="avg" min="50" max="5000" step="10" value="850"></div>
+            <div class="field"><label>Expected growth rate <span class="val" id="vGrowth">3%</span></label><input type="range" id="growth" min="0" max="20" value="3"></div>
+            <div class="field"><label>Look ahead <span class="val" id="vMonths">6 months</span></label><input type="range" id="months" min="1" max="24" value="6"></div>
+          </div>
+          <div class="card">
+            <div class="metrics">
+              <div class="metric"><div class="m-label">Current monthly revenue</div><div class="m-val good" id="revNow">$0</div><div class="m-sub">loads × average</div></div>
+              <div class="metric"><div class="m-label">Projected in <span id="monthsLabel">6</span> months</div><div class="m-val" id="revFuture">$0</div><div class="m-sub">includes growth rate</div></div>
+              <div class="metric"><div class="m-label">Run-rate annual revenue</div><div class="m-val" id="revRun">$0</div><div class="m-sub">current pace × 12</div></div>
+            </div>
+            <div class="callout" id="revCallout"><b>Revenue logic:</b> Multiply current loads by average revenue per load, then layer in expected growth for a simple planning view.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subpanel" id="calc-roi">
+        <div class="grid">
+          <div class="card">
+            <h2>ROI for Tools or Processes</h2>
+            <p class="hint">See whether a tool or workflow pays for itself.</p>
+            <div class="field"><label>Blended hourly cost <span class="val" id="vHourly">$28</span></label><input type="number" id="hourly" value="28" min="1" step="1"></div>
+            <div class="field"><label>Monthly tool cost <span class="val" id="vToolCost">$200</span></label><input type="number" id="toolCost" value="200" min="0" step="10"></div>
+            <div class="field"><label>Email & follow-up hours <span class="val" id="vH1">12 hrs</span></label><input type="range" id="h1" min="0" max="40" value="12"></div>
+            <div class="field"><label>Invoice & payment hours <span class="val" id="vH2">8 hrs</span></label><input type="range" id="h2" min="0" max="40" value="8"></div>
+            <div class="field"><label>Reporting & data entry hours <span class="val" id="vH3">5 hrs</span></label><input type="range" id="h3" min="0" max="40" value="5"></div>
+            <div class="field"><label>Time reduction from automation <span class="val" id="vReduce">50%</span></label><input type="range" id="reduce" min="10" max="85" value="50"></div>
+            <div class="field"><label>Cash flow benefit <span class="val" id="vCashBenefit">$300 / mo</span></label><input type="range" id="cashBenefit" min="0" max="3000" step="50" value="300"></div>
+          </div>
+          <div class="card">
+            <div class="metrics">
+              <div class="metric"><div class="m-label">Hours saved / month</div><div class="m-val good" id="roiHours">0</div><div class="m-sub">weekly hours × 4.33 × reduction</div></div>
+              <div class="metric"><div class="m-label">Value of time saved</div><div class="m-val" id="timeValue">$0</div><div class="m-sub">saved hours × hourly cost</div></div>
+              <div class="metric"><div class="m-label">Net monthly benefit</div><div class="m-val" id="netBenefit">$0</div><div class="m-sub">time + cash flow - tool cost</div></div>
+              <div class="metric"><div class="m-label">Return on spend</div><div class="m-val" id="returnMult">0×</div><div class="m-sub">benefit / tool cost</div></div>
+              <div class="metric"><div class="m-label">Annual benefit</div><div class="m-val good" id="annualBenefit">$0</div><div class="m-sub">net monthly × 12</div></div>
+            </div>
+            <div class="callout" id="roiCallout"><b>ROI note:</b> Try to automate the biggest time sink first — inbox triage, follow-ups, or invoice chasing usually gives the fastest payback.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subpanel" id="calc-commission">
+        <div class="grid">
+          <div class="card">
+            <h2>Commission Calculator</h2>
+            <p class="hint">Use this for sales reps, brokers, or affiliate payments.</p>
+            <div class="field"><label>Revenue this period <span class="val" id="vCommRev">$20,000</span></label><input type="range" id="commRev" min="0" max="200000" step="500" value="20000"></div>
+            <div class="field"><label>Commission rate <span class="val" id="vCommRate">8%</span></label><input type="range" id="commRate" min="0" max="30" step="0.5" value="8"></div>
+            <div class="field"><label>Flat bonus per deal <span class="val" id="vBonus">$0</span></label><input type="range" id="bonus" min="0" max="500" step="10" value="0"></div>
+            <div class="field"><label>Number of deals <span class="val" id="vDeals">5</span></label><input type="range" id="deals" min="1" max="50" value="5"></div>
+          </div>
+          <div class="card">
+            <div class="metrics">
+              <div class="metric"><div class="m-label">Total commission</div><div class="m-val bad" id="commTotal">$0</div><div class="m-sub">percentage + flat bonus</div></div>
+              <div class="metric"><div class="m-label">Commission per deal</div><div class="m-val" id="commPerDeal">$0</div><div class="m-sub">average payout</div></div>
+              <div class="metric"><div class="m-label">Net revenue to company</div><div class="m-val good" id="commNet">$0</div><div class="m-sub">after commission</div></div>
+            </div>
+            <div class="callout" id="commCallout"><b>Commission note:</b> This keeps payouts clear and lets Daniel see how much of each closed deal stays with the company.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subpanel" id="calc-savings">
+        <div class="grid">
+          <div class="card">
+            <h2>Operating Reserve Goal</h2>
+            <p class="hint">Build a cushion to cover slow months and surprise expenses.</p>
+            <div class="field"><label>Average monthly expenses <span class="val" id="vExp">$8,000</span></label><input type="range" id="exp" min="500" max="60000" step="100" value="8000"></div>
+            <div class="field"><label>Target reserve <span class="val" id="vReserveMonths">3 months</span></label><input type="range" id="reserveMonths" min="1" max="12" value="3"></div>
+            <div class="field"><label>Already saved <span class="val" id="vSaved">$0</span></label><input type="range" id="saved" min="0" max="100000" step="500" value="0"></div>
+            <div class="field"><label>Timeline to reach goal <span class="val" id="vTimeline">12 months</span></label><input type="range" id="timeline" min="1" max="36" value="12"></div>
+          </div>
+          <div class="card">
+            <div class="metrics">
+              <div class="metric"><div class="m-label">Reserve goal</div><div class="m-val good" id="reserveGoal">$0</div><div class="m-sub">expenses × months</div></div>
+              <div class="metric"><div class="m-label">Still needed</div><div class="m-val" id="reserveNeeded">$0</div><div class="m-sub">goal − already saved</div></div>
+              <div class="metric"><div class="m-label">Set aside monthly</div><div class="m-val" id="setAside">$0</div><div class="m-sub">needed / timeline</div></div>
+            </div>
+            <div class="callout" id="savCallout"><b>Reserve note:</b> Small businesses usually benefit from 3–6 months of expenses in reserve.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tracker -->
+    <section class="panel" id="panel-tracker">
+      <div class="grid">
+        <div class="card">
+          <h2>Transactions</h2>
+          <p class="hint">Log income and expenses here. Payroll is tracked separately below.</p>
+          <div class="grid-2">
+            <div class="field"><label>Date</label><input type="date" id="txDate"></div>
+            <div class="field"><label>Description</label><input type="text" id="txDesc" placeholder="Client invoice #204"></div>
+            <div class="field"><label>Category</label><input type="text" id="txCat" placeholder="Freight revenue, fuel, overhead"></div>
+            <div class="field"><label>Amount ($)</label><input type="number" id="txAmt" step="0.01" placeholder="0.00"></div>
+          </div>
+          <div class="btn-row">
+            <div class="pill-row" style="margin:0">
+              <button class="pill active" id="txIncomeBtn">Income</button>
+              <button class="pill" id="txExpenseBtn">Expense</button>
+            </div>
+            <button class="btn" id="txAddBtn">+ Add Transaction</button>
+            <button class="btn secondary" id="exportTxBtn">Export CSV</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th><th>Description</th><th>Category</th><th>Type</th><th style="text-align:right;">Amount</th><th></th>
+                </tr>
+              </thead>
+              <tbody id="txBody"></tbody>
+            </table>
+          </div>
+
+          <div class="metrics" style="margin-top:14px">
+            <div class="metric"><div class="m-label">Total revenue</div><div class="m-val good" id="txRevenue">$0</div></div>
+            <div class="metric"><div class="m-label">Total expenses</div><div class="m-val bad" id="txExpense">$0</div></div>
+            <div class="metric"><div class="m-label">Net before payroll</div><div class="m-val" id="txNet">$0</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Payroll</h2>
+          <p class="hint">Track employee pay separately so you can see employer cost more clearly.</p>
+          <div class="grid-2">
+            <div class="field"><label>Date</label><input type="date" id="prDate"></div>
+            <div class="field"><label>Name</label><input type="text" id="prName" placeholder="Maria Santos"></div>
+            <div class="field"><label>Gross amount ($)</label><input type="number" id="prAmt" step="0.01" placeholder="0.00"></div>
+            <div class="field"><label>Pay type</label>
+              <select id="prType">
+                <option value="W-2">W-2</option>
+                <option value="1099">1099</option>
+              </select>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn" id="prAddBtn">+ Add Payment</button>
+            <button class="btn secondary" id="exportPrBtn">Export CSV</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th><th>Name</th><th>Type</th><th style="text-align:right;">Gross Amount</th><th></th>
+                </tr>
+              </thead>
+              <tbody id="prBody"></tbody>
+            </table>
+          </div>
+
+          <div class="metrics" style="margin-top:14px">
+            <div class="metric"><div class="m-label">W-2 wages</div><div class="m-val" id="w2Total">$0</div></div>
+            <div class="metric"><div class="m-label">1099 payments</div><div class="m-val" id="n1099Total">$0</div></div>
+            <div class="metric"><div class="m-label">Employer payroll tax</div><div class="m-val bad" id="payrollTax">$0</div></div>
+            <div class="metric"><div class="m-label">Total payroll cost</div><div class="m-val bad" id="payrollCost">$0</div></div>
+          </div>
+
+          <div class="callout">
+            <b>Payroll note:</b> This estimate uses a simplified employer-side payroll cost view for planning only. Add your actual payroll provider numbers before filing.
+          </div>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:16px;">
+        <div class="card">
+          <h2>Invoice Tracker</h2>
+          <p class="hint">Track what is billed, due, pending, or overdue.</p>
+          <div class="grid-2">
+            <div class="field"><label>Client</label><input type="text" id="invClient" placeholder="Client name"></div>
+            <div class="field"><label>Invoice #</label><input type="text" id="invNum" placeholder="INV-1001"></div>
+            <div class="field"><label>Amount ($)</label><input type="number" id="invAmt" step="0.01" placeholder="0.00"></div>
+            <div class="field"><label>Due date</label><input type="date" id="invDue"></div>
+            <div class="field"><label>Status</label>
+              <select id="invStatus">
+                <option>Pending</option>
+                <option>Paid</option>
+                <option>Overdue</option>
+              </select>
+            </div>
+            <div class="field"><label>Notes</label><input type="text" id="invNotes" placeholder="Shipment completed, follow up Friday"></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn" id="addInvoiceBtn">+ Add Invoice</button>
+            <button class="btn secondary" id="exportInvBtn">Export CSV</button>
+          </div>
+          <div class="table-wrap">
+            <table style="min-width:900px">
+              <thead><tr><th>Client</th><th>Invoice #</th><th>Amount</th><th>Due Date</th><th>Status</th><th>Notes</th><th></th></tr></thead>
+              <tbody id="invBody"></tbody>
+            </table>
+          </div>
+          <div class="metrics" style="margin-top:14px">
+            <div class="metric"><div class="m-label">Open invoices</div><div class="m-val warn" id="invOpen">0</div></div>
+            <div class="metric"><div class="m-label">Overdue invoices</div><div class="m-val bad" id="invOverdue">0</div></div>
+            <div class="metric"><div class="m-label">Outstanding balance</div><div class="m-val" id="invBalance">$0</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Cash Flow Notes</h2>
+          <p class="hint">This block turns the tracker into a simple operating view.</p>
+          <div id="cashNotes"></div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- QuickBooks Integration -->
+    <section class="panel" id="panel-quickbooks">
+      <div class="grid">
+        <div class="card">
+          <h2>QuickBooks Integration</h2>
+          <p class="hint">A bridge between the Command Center and the accounting system. This keeps the dashboard focused on decisions while QuickBooks stays the source of truth for bookkeeping.</p>
+
+          <div class="metrics" style="margin-top:10px">
+            <div class="metric">
+              <div class="m-label">Sync scope</div>
+              <div class="m-val good">Invoices</div>
+              <div class="m-sub">Open, paid, overdue</div>
+            </div>
+            <div class="metric">
+              <div class="m-label">Also sync</div>
+              <div class="m-val">Expenses</div>
+              <div class="m-sub">Vendor spending</div>
+            </div>
+            <div class="metric">
+              <div class="m-label">Payroll link</div>
+              <div class="m-val">Payroll</div>
+              <div class="m-sub">Employer cost view</div>
+            </div>
+          </div>
+
+          <div class="callout">
+            <b>How it fits Daniel:</b> Daniel can review the business in this dashboard, then push clean financial records into QuickBooks for official accounting and tax reporting.
+          </div>
+
+          <div class="grid-2" style="margin-top:14px">
+            <div class="card" style="background:rgba(255,255,255,.03); box-shadow:none;">
+              <h2 style="font-size:16px">What would sync</h2>
+              <p class="hint">Prototype mapping for a real integration later.</p>
+              <div class="smallmuted">
+                • Customer invoices and payment status<br>
+                • Expense entries and categories<br>
+                • Payroll totals and employer tax estimates<br>
+                • Client balance due and month-end summaries
+              </div>
+            </div>
+            <div class="card" style="background:rgba(255,255,255,.03); box-shadow:none;">
+              <h2 style="font-size:16px">Integration notes</h2>
+              <p class="hint">Keep the workflow simple: one click to review, then sync.</p>
+              <div class="smallmuted">
+                • Review in Command Center<br>
+                • Confirm items to sync<br>
+                • Send to QuickBooks<br>
+                • Reconcile in accounting
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-row" style="margin-top:14px">
+            <button class="btn" id="qbSyncBtn">Sync sample records</button>
+            <button class="btn secondary" id="qbImportBtn">Import from QuickBooks</button>
+            <button class="btn secondary" id="qbMapBtn">Show field mapping</button>
+          </div>
+
+          <div class="callout" id="qbStatus" style="margin-top:14px">
+            <b>Status:</b> Ready to connect. This is a prototype section that shows how the business calculator could exchange data with QuickBooks Online.
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Why this matters</h2>
+          <p class="hint">This is the handoff point between day-to-day operations and official bookkeeping.</p>
+
+          <div class="insights" style="grid-template-columns:1fr; gap:12px">
+            <div class="insight">
+              <div class="k">Benefit</div>
+              <div class="v">Daniel gets a fast operational view here, while QuickBooks keeps the books clean behind the scenes.</div>
+            </div>
+            <div class="insight">
+              <div class="k">Best use</div>
+              <div class="v">Use this when an invoice is paid, an expense needs recording, or payroll totals should be passed over.</div>
+            </div>
+            <div class="insight">
+              <div class="k">Practical outcome</div>
+              <div class="v">Less double entry, fewer missed updates, and a clearer month-end close.</div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:14px; background:rgba(255,255,255,.03); box-shadow:none;">
+            <h2 style="font-size:16px">Suggested handoff flow</h2>
+            <div class="smallmuted" id="qbFlow">
+              1. Review figures in this dashboard.<br>
+              2. Confirm invoice, expense, or payroll entries.<br>
+              3. Sync to QuickBooks for accounting and reconciliation.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI Advisor -->
+    <section class="panel" id="panel-advisor">
+      <div class="grid">
+        <div class="card">
+          <h2>AI Business Advisor</h2>
+          <p class="hint">Automatic, plain-language observations based on current data.</p>
+          <div class="insights" style="grid-template-columns:1fr;gap:12px">
+            <div class="insight"><div class="k">Business health</div><div class="v" id="advice1">Log data to generate a summary.</div></div>
+            <div class="insight"><div class="k">Cash risk</div><div class="v" id="advice2">This will show invoice and payroll pressure.</div></div>
+            <div class="insight"><div class="k">Collections move</div><div class="v" id="advice3">This will suggest the next best action.</div></div>
+            <div class="insight"><div class="k">Simple recommendation</div><div class="v" id="advice4">This is where the tool helps Daniel decide faster.</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <h2>AI Prompt Starter</h2>
+          <p class="hint">Use these prompts with ChatGPT, Claude, or Gemini.</p>
+          <div class="callout">
+            <b>Prompt:</b> Summarize this dashboard in 5 bullets for Daniel. Focus on revenue, overdue invoices, payroll risk, tax reserve, and the next action.
+          </div>
+          <div class="callout" style="margin-top:12px">
+            <b>Prompt:</b> Which invoice should be followed up first, and what is the shortest useful next step?
+          </div>
+          <div class="callout" style="margin-top:12px">
+            <b>Prompt:</b> Based on current cash flow, what should be reserved for taxes and what can safely stay available?
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CRM -->
+    <section class="panel" id="panel-crm">
+      <div class="grid">
+        <div class="card">
+          <h2>Client CRM</h2>
+          <p class="hint">Keep contact history, last touch, balance, and follow-up date in one place.</p>
+          <div class="grid-2">
+            <div class="field"><label>Client name</label><input type="text" id="clName" placeholder="ABC Shipping"></div>
+            <div class="field"><label>Contact person</label><input type="text" id="clContact" placeholder="John Doe"></div>
+            <div class="field"><label>Last contact</label><input type="date" id="clLast"></div>
+            <div class="field"><label>Next follow-up</label><input type="date" id="clNext"></div>
+            <div class="field"><label>Outstanding balance ($)</label><input type="number" id="clBalance" step="0.01" placeholder="0.00"></div>
+            <div class="field"><label>Status</label>
+              <select id="clStatus">
+                <option>Active</option>
+                <option>Waiting on reply</option>
+                <option>At risk</option>
+                <option>Closed</option>
+              </select>
+            </div>
+            <div class="field" style="grid-column:1/-1"><label>Notes</label><input type="text" id="clNotes" placeholder="Needs follow-up on quote and payment terms"></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn" id="addClientBtn">+ Add Client</button>
+            <button class="btn secondary" id="exportClientBtn">Export CSV</button>
+          </div>
+          <div class="table-wrap">
+            <table style="min-width:980px">
+              <thead><tr><th>Client</th><th>Contact</th><th>Last Contact</th><th>Next Follow-up</th><th>Balance</th><th>Status</th><th>Notes</th><th></th></tr></thead>
+              <tbody id="clientBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>CRM Summary</h2>
+          <p class="hint">A short list of where attention is needed.</p>
+          <div class="metrics">
+            <div class="metric"><div class="m-label">Active clients</div><div class="m-val good" id="clientCount">0</div></div>
+            <div class="metric"><div class="m-label">At-risk clients</div><div class="m-val warn" id="riskCount">0</div></div>
+            <div class="metric"><div class="m-label">Client balance due</div><div class="m-val bad" id="clientBalance">$0</div></div>
+          </div>
+          <div class="callout" id="crmCallout">
+            <b>CRM note:</b> Keep this updated once a day. Daniel only needs the next move, not a long explanation.
+          </div>
+          <div class="card" style="margin-top:16px">
+            <h2>Follow-up Queue</h2>
+            <div id="followQueue"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Goals -->
+    <section class="panel" id="panel-goals">
+      <div class="grid">
+        <div class="card">
+          <h2>Goals Dashboard</h2>
+          <p class="hint">Track targets for the month.</p>
+          <div class="grid-2">
+            <div class="field"><label>Monthly revenue goal ($)</label><input type="number" id="goalRevenue" value="45000" step="100"></div>
+            <div class="field"><label>Monthly profit goal ($)</label><input type="number" id="goalProfit" value="15000" step="100"></div>
+            <div class="field"><label>Collections goal ($)</label><input type="number" id="goalCollections" value="30000" step="100"></div>
+            <div class="field"><label>Tax reserve goal ($)</label><input type="number" id="goalTax" value="6000" step="100"></div>
+          </div>
+          <div class="metrics">
+            <div class="metric"><div class="m-label">Revenue progress</div><div class="m-val" id="goalRevenueVal">$0 / $0</div><div class="progress"><div class="bar" id="barRevenue"></div></div></div>
+            <div class="metric"><div class="m-label">Profit progress</div><div class="m-val" id="goalProfitVal">$0 / $0</div><div class="progress"><div class="bar" id="barProfit"></div></div></div>
+            <div class="metric"><div class="m-label">Collections progress</div><div class="m-val" id="goalCollectionsVal">$0 / $0</div><div class="progress"><div class="bar" id="barCollections"></div></div></div>
+            <div class="metric"><div class="m-label">Tax reserve progress</div><div class="m-val" id="goalTaxVal">$0 / $0</div><div class="progress"><div class="bar" id="barTax"></div></div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Calendar & Deadlines</h2>
+          <p class="hint">Use this to surface payroll, taxes, invoice due dates, and follow-ups.</p>
+          <div class="grid-2">
+            <div class="field"><label>Date</label><input type="date" id="eventDate"></div>
+            <div class="field"><label>Type</label>
+              <select id="eventType">
+                <option>Invoice Due</option>
+                <option>Payroll</option>
+                <option>Tax Deadline</option>
+                <option>Client Follow-up</option>
+              </select>
+            </div>
+            <div class="field" style="grid-column:1/-1"><label>Event</label><input type="text" id="eventTitle" placeholder="Follow up on overdue invoice"></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn" id="addEventBtn">+ Add Event</button>
+          </div>
+          <div id="eventList"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tax -->
+    <section class="panel" id="panel-tax">
+      <div class="grid">
+        <div class="card">
+          <h2>Tax Planner</h2>
+          <div class="disclaimer">
+            <b>Estimate only.</b> This is a planning tool, not tax advice. It uses simplified U.S. federal rules for reserve sizing and does not include every deduction, credit, or state-specific rule.
+          </div>
+
+          <div class="grid-2" style="margin-top:14px">
+            <div class="field">
+              <label>Business structure</label>
+              <select id="entity">
+                <option value="soleprop">Sole Proprietor / Single-Member LLC</option>
+                <option value="scorp">S-Corporation</option>
+                <option value="ccorp">C-Corporation</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Filing status</label>
+              <select id="filing">
+                <option value="single">Single</option>
+                <option value="mfj">Married Filing Jointly</option>
+              </select>
+            </div>
+            <div class="field"><label>Other owner income ($)</label><input type="number" id="otherIncome" value="0" min="0" step="100"></div>
+            <div class="field"><label>Flat state tax rate (%)</label><input type="number" id="stateRate" value="0" min="0" step="0.1"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Suggested Tax Reserve</h2>
+          <div class="metrics">
+            <div class="metric"><div class="m-label">Tax reserve</div><div class="m-val bad" id="taxReserve">$0</div><div class="m-sub">federal + state estimate</div></div>
+            <div class="metric"><div class="m-label">Quarterly set-aside</div><div class="m-val" id="quarterly">$0</div><div class="m-sub">reserve ÷ 4</div></div>
+            <div class="metric"><div class="m-label">Net profit from tracker</div><div class="m-val good" id="taxProfit">$0</div><div class="m-sub">used as the base</div></div>
+          </div>
+          <div class="callout" id="taxNote"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">Built for the AI Builder Challenge · Daniel Reyes · Blue SaaS theme · Functional prototype with calculator, tracker, invoices, CRM, goals, charts, and reserve planning.</div>
+  </div>
+
+<script>
+  const fmt = new Intl.NumberFormat('en-US', { style:'currency', currency:'USD', maximumFractionDigits:2 });
+  const fmt0 = new Intl.NumberFormat('en-US', { maximumFractionDigits:0 });
+
+  const BRACKETS_SINGLE = [[0,12400,0.10],[12400,50400,0.12],[50400,105700,0.22],[105700,201775,0.24],[201775,256225,0.32],[256225,640600,0.35],[640600,Infinity,0.37]];
+  const BRACKETS_MFJ = [[0,24800,0.10],[24800,100800,0.12],[100800,211400,0.22],[211400,403550,0.24],[403550,512450,0.32],[512450,1281200,0.35],[1281200,Infinity,0.37]];
+  const STD = {single:16100, mfj:32200};
+  const SS_WAGE_BASE = 184500;
+  const ADD_MED = {single:200000, mfj:250000};
+
+  const state = {
+    txType: 'income',
+    transactions: [
+      {id:1, date:'2026-07-01', desc:'Client shipment payment', cat:'Revenue', type:'income', amt:2400},
+      {id:2, date:'2026-07-01', desc:'Fuel and tolls', cat:'Operations', type:'expense', amt:420},
+      {id:3, date:'2026-07-02', desc:'Dispatch team payroll', cat:'Payroll', type:'expense', amt:850},
+    ],
+    payroll: [
+      {id:1, date:'2026-07-02', name:'Maria Santos', type:'W-2', amt:650},
+      {id:2, date:'2026-07-02', name:'Ibrahim Ali', type:'1099', amt:400},
+    ],
+    invoices: [
+      {id:1, client:'ABC Shipping', num:'INV-1001', amt:3200, due:'2026-07-04', status:'Pending', notes:'Follow up Friday'},
+      {id:2, client:'North Freight', num:'INV-1002', amt:1800, due:'2026-06-26', status:'Overdue', notes:'Partial payment expected'},
+      {id:3, client:'Blue Route', num:'INV-1003', amt:950, due:'2026-06-20', status:'Paid', notes:'Closed'},
+    ],
+    clients: [
+      {id:1, name:'ABC Shipping', contact:'John Doe', last:'2026-06-28', next:'2026-07-04', balance:3200, status:'Waiting on reply', notes:'Need payment confirmation'},
+      {id:2, name:'North Freight', contact:'Sara Lee', last:'2026-06-24', next:'2026-07-03', balance:1800, status:'At risk', notes:'Follow up with invoice and delivery note'},
+      {id:3, name:'Blue Route', contact:'Ali Hassan', last:'2026-07-01', next:'2026-07-08', balance:0, status:'Active', notes:'Great account, keep warm'},
+    ],
+    events: [
+      {id:1, date:'2026-07-03', type:'Invoice Due', title:'Follow up on North Freight invoice'},
+      {id:2, date:'2026-07-05', type:'Payroll', title:'Dispatch team payroll run'},
+      {id:3, date:'2026-07-12', type:'Tax Deadline', title:'Set aside quarterly reserve'},
+    ],
+    prType:'W-2',
+    qbLog: []
+  };
+
+  function save() {
+    localStorage.setItem('reyes-command-center-pro-v1', JSON.stringify({
+      transactions: state.transactions,
+      payroll: state.payroll,
+      invoices: state.invoices,
+      clients: state.clients,
+      events: state.events,
+      qbLog: state.qbLog
+    }));
+  }
+  function load() {
+    const raw = localStorage.getItem('reyes-command-center-pro-v1');
+    if (!raw) return;
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed.transactions)) state.transactions = parsed.transactions;
+      if (Array.isArray(parsed.payroll)) state.payroll = parsed.payroll;
+      if (Array.isArray(parsed.invoices)) state.invoices = parsed.invoices;
+      if (Array.isArray(parsed.clients)) state.clients = parsed.clients;
+      if (Array.isArray(parsed.events)) state.events = parsed.events;
+      if (Array.isArray(parsed.qbLog)) state.qbLog = parsed.qbLog;
+    } catch(e){}
+  }
+  function today() { return new Date().toISOString().split('T')[0]; }
+
+  function totals() {
+    const txRevenue = state.transactions.filter(t => t.type === 'income').reduce((s,t)=>s+t.amt,0);
+    const txExpense = state.transactions.filter(t => t.type === 'expense').reduce((s,t)=>s+t.amt,0);
+    const w2 = state.payroll.filter(p => p.type === 'W-2').reduce((s,p)=>s+p.amt,0);
+    const n1099 = state.payroll.filter(p => p.type === '1099').reduce((s,p)=>s+p.amt,0);
+    const w2Count = new Set(state.payroll.filter(p => p.type === 'W-2').map(p => p.name)).size;
+    const employerTax = (w2 * 0.0765) + (w2Count * 42);
+    const payrollCost = w2 + n1099 + employerTax;
+    const netProfit = txRevenue - txExpense - payrollCost;
+    const invoiceOutstanding = state.invoices.filter(i => i.status !== 'Paid').reduce((s,i)=>s+i.amt,0);
+    const overdueCount = state.invoices.filter(i => i.status === 'Overdue').length;
+    const pendingCount = state.invoices.filter(i => i.status !== 'Paid').length;
+    return { txRevenue, txExpense, w2, n1099, employerTax, payrollCost, netProfit, invoiceOutstanding, overdueCount, pendingCount };
+  }
+
+  function computeFederal(taxable, filing) {
+    if (taxable <= 0) return 0;
+    const brackets = filing === 'mfj' ? BRACKETS_MFJ : BRACKETS_SINGLE;
+    let tax = 0;
+    for (const [lo,hi,rate] of brackets) {
+      if (taxable > lo) tax += (Math.min(taxable,hi) - lo) * rate;
+      else break;
+    }
+    return tax;
+  }
+  function seTax(netProfit, filing) {
+    if (netProfit <= 0) return { base: 0, addl: 0, total: 0 };
+    const netSE = netProfit * 0.9235;
+    const ss = Math.min(netSE, SS_WAGE_BASE) * 0.124;
+    const med = netSE * 0.029;
+    const addl = netSE > ADD_MED[filing] ? (netSE - ADD_MED[filing]) * 0.009 : 0;
+    return { base: ss + med, addl, total: ss + med + addl };
+  }
+
+  function taxEstimate(netProfit) {
+    const entity = document.getElementById('entity').value;
+    const filing = document.getElementById('filing').value;
+    const other = Number(document.getElementById('otherIncome').value) || 0;
+    const stateRate = (Number(document.getElementById('stateRate').value) || 0)/100;
+    let tax = 0;
+    let note = '';
+    if (netProfit <= 0) {
+      tax = 0;
+      note = '<b>No reserve required from this profit level.</b> The business is at or below break-even on this tracker. You may still owe tax on other income.';
+      return { tax, note };
+    }
+    if (entity === 'soleprop') {
+      const se = seTax(netProfit, filing);
+      const taxable = Math.max(0, (netProfit + other) - STD[filing] - (se.base * 0.5));
+      const fed = computeFederal(taxable, filing);
+      const state = netProfit * stateRate;
+      tax = se.total + fed + state;
+      note = '<b>Sole prop / single-member LLC:</b> profit flows to the owner\'s personal return. This reserve includes self-employment tax, federal income tax, and your chosen state estimate.';
+    } else if (entity === 'scorp') {
+      const taxable = Math.max(0, (netProfit + other) - STD[filing]);
+      const fed = computeFederal(taxable, filing);
+      const state = netProfit * stateRate;
+      tax = fed + state;
+      note = '<b>S-Corp:</b> W-2 owner salary should be handled in payroll. Profit distributions are not subject to self-employment tax here.';
+    } else {
+      const corp = netProfit * 0.21;
+      const state = netProfit * stateRate;
+      tax = corp + state;
+      note = '<b>C-Corp:</b> this uses a flat 21% federal corporate tax estimate plus your state reserve. Owner salary/dividends are taxed separately.';
+    }
+    return { tax, note };
+  }
+
+  function renderTransactions() {
+    const tbody = document.getElementById('txBody');
+    if (state.transactions.length === 0) {
+      tbody.innerHTML = '<tr><td class="empty" colspan="6">No transactions logged yet.</td></tr>';
+    } else {
+      tbody.innerHTML = state.transactions.slice().reverse().map(t => `
+        <tr>
+          <td>${t.date}</td>
+          <td>${t.desc}</td>
+          <td>${t.cat}</td>
+          <td>${t.type === 'income' ? 'Income' : 'Expense'}</td>
+          <td style="text-align:right" class="${t.type === 'income' ? 'amt-income' : 'amt-expense'}">${t.type === 'income' ? '+' : '-'}${fmt.format(t.amt)}</td>
+          <td><button class="del" data-del-tx="${t.id}">×</button></td>
+        </tr>
+      `).join('');
+    }
+    tbody.querySelectorAll('[data-del-tx]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.transactions = state.transactions.filter(t => t.id !== Number(btn.dataset.delTx));
+        save(); renderAll();
+      });
+    });
+  }
+
+  function renderPayroll() {
+    const tbody = document.getElementById('prBody');
+    if (state.payroll.length === 0) {
+      tbody.innerHTML = '<tr><td class="empty" colspan="5">No payroll entries yet.</td></tr>';
+    } else {
+      tbody.innerHTML = state.payroll.slice().reverse().map(p => `
+        <tr>
+          <td>${p.date}</td>
+          <td>${p.name}</td>
+          <td>${p.type}</td>
+          <td style="text-align:right" class="amt-expense">${fmt.format(p.amt)}</td>
+          <td><button class="del" data-del-pr="${p.id}">×</button></td>
+        </tr>
+      `).join('');
+    }
+    tbody.querySelectorAll('[data-del-pr]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.payroll = state.payroll.filter(p => p.id !== Number(btn.dataset.delPr));
+        save(); renderAll();
+      });
+    });
+  }
+
+  function renderInvoices() {
+    const tbody = document.getElementById('invBody');
+    if (state.invoices.length === 0) {
+      tbody.innerHTML = '<tr><td class="empty" colspan="7">No invoices logged yet.</td></tr>';
+    } else {
+      tbody.innerHTML = state.invoices.slice().reverse().map(i => `
+        <tr>
+          <td>${i.client}</td>
+          <td>${i.num}</td>
+          <td>${fmt.format(i.amt)}</td>
+          <td>${i.due}</td>
+          <td>${i.status}</td>
+          <td>${i.notes || ''}</td>
+          <td><button class="del" data-del-inv="${i.id}">×</button></td>
+        </tr>
+      `).join('');
+    }
+    tbody.querySelectorAll('[data-del-inv]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.invoices = state.invoices.filter(i => i.id !== Number(btn.dataset.delInv));
+        save(); renderAll();
+      });
+    });
+  }
+
+  function renderClients() {
+    const tbody = document.getElementById('clientBody');
+    if (state.clients.length === 0) {
+      tbody.innerHTML = '<tr><td class="empty" colspan="8">No clients logged yet.</td></tr>';
+    } else {
+      tbody.innerHTML = state.clients.slice().reverse().map(c => `
+        <tr>
+          <td>${c.name}</td>
+          <td>${c.contact}</td>
+          <td>${c.last}</td>
+          <td>${c.next}</td>
+          <td>${fmt.format(c.balance)}</td>
+          <td>${c.status}</td>
+          <td>${c.notes || ''}</td>
+          <td><button class="del" data-del-cl="${c.id}">×</button></td>
+        </tr>
+      `).join('');
+    }
+    tbody.querySelectorAll('[data-del-cl]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.clients = state.clients.filter(c => c.id !== Number(btn.dataset.delCl));
+        save(); renderAll();
+      });
+    });
+  }
+
+  function renderEvents() {
+    const wrap = document.getElementById('eventList');
+    if (state.events.length === 0) {
+      wrap.innerHTML = '<div class="smallmuted">No events yet.</div>';
+    } else {
+      wrap.innerHTML = state.events
+        .slice()
+        .sort((a,b)=>a.date.localeCompare(b.date))
+        .map(e => `<div class="callout" style="margin-top:10px"><b>${e.date}</b> · ${e.type}<br>${e.title}</div>`)
+        .join('');
+    }
+  }
+
+  function setText(id, value) { document.getElementById(id).textContent = value; }
+
+  function pushQBLog(entry) {
+    state.qbLog.unshift({ date: today(), ...entry });
+    state.qbLog = state.qbLog.slice(0, 6);
+    save();
+    renderQBStatus();
+  }
+
+  function renderQBStatus() {
+    const box = document.getElementById('qbStatus');
+    const stat = document.getElementById('statQB');
+    if (!box || !stat) return;
+    const last = state.qbLog[0];
+    if (!last) {
+      box.innerHTML = '<b>Status:</b> Ready to connect. This is a prototype section that shows how the business calculator could exchange data with QuickBooks Online.';
+      stat.textContent = 'Ready';
+      return;
+    }
+    stat.textContent = 'Linked';
+    const latest = state.qbLog.map(item => `• ${item.date} · ${item.action}`).join('<br>');
+    box.innerHTML = `<b>Status:</b> ${last.action}<br><br><span class="smallmuted">${latest}</span>`;
+  }
+
+  function renderDashboard() {
+    const t = totals();
+    const ta = taxEstimate(t.netProfit);
+    const cash = t.netProfit - ta.tax;
+
+    setText('statRevenue', fmt.format(t.txRevenue));
+    setText('statProfit', fmt.format(t.netProfit));
+    setText('statTax', fmt.format(ta.tax));
+    setText('statCash', fmt.format(cash));
+    setText('statPending', t.pendingCount);
+
+    setText('dashRevenue', fmt.format(t.txRevenue));
+    setText('dashCost', fmt.format(t.txExpense + t.payrollCost));
+    setText('dashNet', fmt.format(t.netProfit));
+    setText('dashTax', fmt.format(ta.tax));
+    setText('dashOpenInv', t.pendingCount);
+
+    const summary = document.getElementById('hero-summary');
+    if (state.transactions.length + state.payroll.length + state.invoices.length + state.clients.length === 0) {
+      summary.textContent = 'Log one transaction and the dashboard will update automatically. The goal is to keep the system simple: know what is coming in, what is going out, what is owed, and what needs attention today.';
+      setText('insight1', 'Log activity to generate a summary.');
+      setText('insight2', 'This will flag invoices, payroll, and reserve pressure.');
+      setText('insight3', 'Add a transaction, then review tax reserve and cash available.');
+      setText('advice1', 'Add a few records to generate business insights.');
+      setText('advice2', 'Invoice and payroll pressure will show here.');
+      setText('advice3', 'A follow-up action will appear once data is entered.');
+      setText('advice4', 'Daniel gets a clean, short recommendation instead of a long report.');
+    } else {
+      summary.textContent = `Current net profit is ${fmt.format(t.netProfit)} and the estimated reserve is ${fmt.format(ta.tax)}. Cash available after reserve is ${fmt.format(cash)}.`;
+      setText('insight1', t.netProfit >= 0 ? `Business is positive by ${fmt.format(t.netProfit)} before tax reserve.` : `Business is running negative by ${fmt.format(Math.abs(t.netProfit))} before reserve.`);
+      const payrollShare = t.payrollCost > 0 ? ((t.payrollCost / Math.max(1, t.txRevenue + t.txExpense + t.payrollCost)) * 100) : 0;
+      setText('insight2', `Payroll and employer cost represent about ${payrollShare.toFixed(1)}% of total outflow. Watch this if margins feel tight.`);
+      setText('insight3', cash >= 0 ? `Reserve is covered. Use ${fmt.format(cash)} for operating cash and collections follow-up.` : `Reserve is tight. Prioritize collections and slow down new spending.`);
+      setText('advice1', t.txRevenue > 0 ? `Revenue is being captured at ${fmt.format(t.txRevenue)}. Keep pushing collections and confirm the next billing cycle.` : 'No revenue logged yet. Start with invoices or completed shipments.');
+      setText('advice2', t.pendingCount > 0 ? `${t.pendingCount} open invoices are sitting in the system. Follow up on the oldest overdue item first.` : 'No open invoices are showing. Nice control on collections.');
+      setText('advice3', cash >= 0 ? `The next best move is collections follow-up, then set aside ${fmt.format(ta.tax)} for taxes.` : 'The next best move is to collect cash and pause nonessential spend.');
+      setText('advice4', `Simple recommendation: keep taxes reserved, clear overdue invoices, and review payroll before adding new spend.`);
+    }
+
+    renderActionList(t, ta, cash);
+    renderCashNotes(t, ta, cash);
+    updateGoals();
+    updateAdvisorPanel(t, ta, cash);
+    updateCRM();
+    drawMixChart();
+    drawProjectionChart();
+    drawGaugeChart();
+  }
+
+  function renderActionList(t, ta, cash) {
+    const list = [];
+    if (state.invoices.some(i => i.status === 'Overdue')) list.push('Follow up on overdue invoices first.');
+    if (state.invoices.some(i => i.status === 'Pending')) list.push('Confirm payment dates on pending invoices.');
+    if (t.netProfit > 0 && ta.tax > 0) list.push(`Move ${fmt.format(ta.tax)} into tax reserve.`);
+    if (t.payrollCost > 0) list.push('Review payroll cost before taking on new hires.');
+    if (cash < 0) list.push('Pull back on spending and accelerate collections.');
+    if (state.clients.some(c => c.status === 'At risk')) list.push('Reach out to at-risk clients with a short follow-up.');
+    if (!list.length) list.push('No urgent actions right now. Keep logging and reviewing the dashboard.');
+    document.getElementById('actionList').innerHTML = list.map(item => `<div class="callout" style="margin-top:10px">${item}</div>`).join('');
+  }
+
+  function renderCashNotes(t, ta, cash) {
+    const wrap = document.getElementById('cashNotes');
+    const overdue = state.invoices.filter(i => i.status === 'Overdue').reduce((s,i)=>s+i.amt,0);
+    const pending = state.invoices.filter(i => i.status === 'Pending').reduce((s,i)=>s+i.amt,0);
+    const notes = [
+      {k:'Overdue invoices', v:fmt.format(overdue), c:'Money already late'},
+      {k:'Pending invoices', v:fmt.format(pending), c:'Money expected soon'},
+      {k:'Tax reserve', v:fmt.format(ta.tax), c:'Protect this before spending'},
+      {k:'Cash after reserve', v:fmt.format(cash), c:'Available operating cash'},
+    ];
+    wrap.innerHTML = notes.map(n => `
+      <div class="metric" style="margin-top:10px">
+        <div class="m-label">${n.k}</div>
+        <div class="m-val">${n.v}</div>
+        <div class="m-sub">${n.c}</div>
+      </div>
+    `).join('');
+  }
+
+  function updateAdvisorPanel(t, ta, cash) {
+    const revenue = t.txRevenue;
+    const invoiceDue = state.invoices.filter(i => i.status !== 'Paid').reduce((s,i)=>s+i.amt,0);
+    const overdue = state.invoices.filter(i => i.status === 'Overdue').reduce((s,i)=>s+i.amt,0);
+    const atRiskClients = state.clients.filter(c => c.status === 'At risk').length;
+    const payrollCost = t.payrollCost;
+    const response = [];
+    response.push(revenue > 0 ? `Revenue is ${fmt.format(revenue)}. Keep collections moving and watch margin.` : 'No revenue logged yet. Capture completed jobs and invoice them quickly.');
+    response.push(invoiceDue > 0 ? `${fmt.format(invoiceDue)} is still open across invoices, with ${fmt.format(overdue)} overdue.` : 'Invoice collection is clean right now.');
+    response.push(payrollCost > 0 ? `Payroll cost is ${fmt.format(payrollCost)}. That is a material cost line to watch.` : 'No payroll cost is logged yet.');
+    response.push(cash >= 0 ? `Cash available after reserve is ${fmt.format(cash)}.` : `Cash is negative after reserve by ${fmt.format(Math.abs(cash))}.`);
+    response.push(atRiskClients > 0 ? `${atRiskClients} client(s) are marked at risk.` : 'No clients are currently marked at risk.');
+    document.getElementById('advice1').textContent = response[0];
+    document.getElementById('advice2').textContent = response[1];
+    document.getElementById('advice3').textContent = invoiceDue > 0 ? `Follow up on the oldest overdue invoice first to improve cash flow.` : `Good to go — keep the follow-up queue light and consistent.`;
+    document.getElementById('advice4').textContent = cash >= 0 ? `Set aside ${fmt.format(ta.tax)} for taxes and keep ${fmt.format(cash)} as operating cash.` : `Priority: collections first, then tax reserve, then growth spend.`;
+  }
+
+  function updateCRM() {
+    const count = state.clients.filter(c => c.status === 'Active' || c.status === 'Waiting on reply' || c.status === 'At risk').length;
+    const risk = state.clients.filter(c => c.status === 'At risk').length;
+    const balance = state.clients.reduce((s,c)=>s+(c.balance||0),0);
+    setText('clientCount', count);
+    setText('riskCount', risk);
+    setText('clientBalance', fmt.format(balance));
+    document.getElementById('crmCallout').innerHTML = risk > 0
+      ? `<b>CRM note:</b> ${risk} client(s) need attention. Keep Daniel focused on the next move, not a long status report.`
+      : `<b>CRM note:</b> No clients are marked at risk right now. Keep the follow-up rhythm consistent.`;
+    const queue = state.clients
+      .filter(c => c.next)
+      .slice()
+      .sort((a,b)=>a.next.localeCompare(b.next))
+      .slice(0,5)
+      .map(c => `<div class="callout" style="margin-top:10px"><b>${c.name}</b> · ${c.status}<br>Follow up by ${c.next} · ${fmt.format(c.balance || 0)}</div>`)
+      .join('');
+    document.getElementById('followQueue').innerHTML = queue || '<div class="smallmuted">No follow-ups scheduled yet.</div>';
+  }
+
+  function drawMixChart() {
+    const canvas = document.getElementById('mixChart');
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = canvas.clientWidth || 460;
+    const cssH = canvas.clientHeight || 260;
+    canvas.width = cssW * dpr;
+    canvas.height = cssH * dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+
+    const t = totals();
+    const revenue = Math.max(0, t.txRevenue);
+    const expense = Math.max(0, t.txExpense);
+    const payroll = Math.max(0, t.payrollCost);
+    const values = [revenue, expense, payroll];
+    const labels = ['Revenue','Expenses','Payroll'];
+    const colors = ['#5aa7ff','#fb7185','#7c6cff'];
+    const max = Math.max(1, ...values) * 1.15;
+
+    ctx.clearRect(0,0,cssW,cssH);
+    ctx.fillStyle = 'rgba(255,255,255,.02)';
+    ctx.fillRect(0,0,cssW,cssH);
+
+    const pad = 22;
+    const chartW = cssW - pad*2;
+    const chartH = cssH - pad*2 - 18;
+    const barW = chartW / values.length * 0.55;
+    values.forEach((v,i) => {
+      const x = pad + (chartW/values.length)*(i+0.5) - barW/2;
+      const h = (v/max)*chartH;
+      const y = pad + chartH - h;
+      const grad = ctx.createLinearGradient(0,y,0,y+h);
+      grad.addColorStop(0, colors[i]);
+      grad.addColorStop(1, 'rgba(255,255,255,.15)');
+      ctx.fillStyle = grad;
+      roundRect(ctx, x, y, barW, h, 12);
+      ctx.fill();
+      ctx.fillStyle = '#d9e7ff';
+      ctx.font = '12px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(labels[i], x + barW/2, cssH - 14);
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 12px Inter, sans-serif';
+      ctx.fillText(fmt0.format(v), x + barW/2, y - 8);
+    });
+  }
+
+  function drawProjectionChart() {
+    const canvas = document.getElementById('projectionChart');
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = canvas.clientWidth || 460;
+    const cssH = canvas.clientHeight || 260;
+    canvas.width = cssW * dpr;
+    canvas.height = cssH * dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+
+    const loads = Number(document.getElementById('loads').value)||0;
+    const avg = Number(document.getElementById('avg').value)||0;
+    const growth = Number(document.getElementById('growth').value)||0;
+    const months = Number(document.getElementById('months').value)||1;
+
+    const start = loads * avg;
+    const points = [];
+    for(let m=0; m<=12; m++) points.push(start * Math.pow(1 + growth/100, m));
+    const max = Math.max(...points) * 1.12;
+
+    ctx.clearRect(0,0,cssW,cssH);
+    ctx.fillStyle = 'rgba(255,255,255,.02)';
+    ctx.fillRect(0,0,cssW,cssH);
+
+    const pad = 24;
+    const cw = cssW - pad*2;
+    const ch = cssH - pad*2 - 12;
+
+    ctx.strokeStyle = 'rgba(255,255,255,.08)';
+    ctx.lineWidth = 1;
+    for(let i=0;i<5;i++){
+      const y = pad + (ch/4)*i;
+      ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(cssW-pad, y); ctx.stroke();
+    }
+
+    const stepX = cw / 12;
+    ctx.beginPath();
+    points.forEach((v,i) => {
+      const x = pad + stepX*i;
+      const y = pad + ch - (v/max) * ch;
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    });
+    ctx.strokeStyle = '#5aa7ff';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    const grad = ctx.createLinearGradient(0,pad,0,pad+ch);
+    grad.addColorStop(0, 'rgba(90,167,255,.34)');
+    grad.addColorStop(1, 'rgba(90,167,255,0)');
+    ctx.lineTo(pad + stepX*12, pad + ch);
+    ctx.lineTo(pad, pad + ch);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    const hx = pad + stepX*months;
+    const hy = pad + ch - (points[months]/max) * ch;
+    ctx.beginPath();
+    ctx.arc(hx, hy, 5, 0, Math.PI*2);
+    ctx.fillStyle = '#7c6cff';
+    ctx.fill();
+
+    ctx.fillStyle = '#d9e7ff';
+    ctx.font = '12px Inter, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('Month 0', pad, cssH - 14);
+    ctx.textAlign = 'right';
+    ctx.fillText('Month 12', cssW - pad, cssH - 14);
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 12px Inter, sans-serif';
+    ctx.fillText(`${fmt.format(points[months])} at month ${months}`, hx, Math.max(16, hy - 14));
+  }
+
+  function drawGaugeChart() {
+    const canvas = document.getElementById('gaugeChart');
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = canvas.clientWidth || 460;
+    const cssH = canvas.clientHeight || 260;
+    canvas.width = cssW * dpr;
+    canvas.height = cssH * dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+
+    const t = totals();
+    const ta = taxEstimate(t.netProfit);
+    const reserve = Math.max(0, ta.tax);
+    const profit = Math.max(1, t.netProfit + reserve);
+    const pct = Math.min(1, reserve / profit);
+
+    ctx.clearRect(0,0,cssW,cssH);
+    ctx.fillStyle = 'rgba(255,255,255,.02)';
+    ctx.fillRect(0,0,cssW,cssH);
+
+    const cx = cssW/2;
+    const cy = cssH/2 + 6;
+    const r = Math.min(cssW, cssH) * 0.26;
+    ctx.lineCap = 'round';
+
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(255,255,255,.10)';
+    ctx.lineWidth = 18;
+    ctx.arc(cx, cy, r, Math.PI*0.75, Math.PI*2.25);
+    ctx.stroke();
+
+    const start = Math.PI*0.75;
+    const end = start + (Math.PI*1.5)*pct;
+    const grad = ctx.createLinearGradient(cx-r, cy-r, cx+r, cy+r);
+    grad.addColorStop(0, '#5aa7ff');
+    grad.addColorStop(1, '#7c6cff');
+    ctx.beginPath();
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 18;
+    ctx.arc(cx, cy, r, start, end);
+    ctx.stroke();
+
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 28px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(fmt.format(reserve), cx, cy - 6);
+    ctx.fillStyle = '#d9e7ff';
+    ctx.font = '12px Inter, sans-serif';
+    ctx.fillText(`${Math.round(pct*100)}% of current profit`, cx, cy + 18);
+    ctx.fillStyle = '#9eb4d8';
+    ctx.fillText('reserve target', cx, cy + 38);
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    const radius = Math.min(r, w/2, h/2);
+    ctx.beginPath();
+    ctx.moveTo(x+radius, y);
+    ctx.arcTo(x+w, y, x+w, y+h, radius);
+    ctx.arcTo(x+w, y+h, x, y+h, radius);
+    ctx.arcTo(x, y+h, x, y, radius);
+    ctx.arcTo(x, y, x+w, y, radius);
+    ctx.closePath();
+  }
+
+  function updateGoals() {
+    const t = totals();
+    const ta = taxEstimate(t.netProfit);
+    const revenueGoal = Number(document.getElementById('goalRevenue').value) || 1;
+    const profitGoal = Number(document.getElementById('goalProfit').value) || 1;
+    const collectionsGoal = Number(document.getElementById('goalCollections').value) || 1;
+    const taxGoal = Number(document.getElementById('goalTax').value) || 1;
+    const invoiceOutstanding = t.invoiceOutstanding;
+    const reserve = ta.tax;
+    const goalData = [
+      ['goalRevenueVal', 'barRevenue', t.txRevenue, revenueGoal],
+      ['goalProfitVal', 'barProfit', t.netProfit, profitGoal],
+      ['goalCollectionsVal', 'barCollections', invoiceOutstanding, collectionsGoal],
+      ['goalTaxVal', 'barTax', reserve, taxGoal]
+    ];
+    goalData.forEach(([txt, bar, value, goal]) => {
+      document.getElementById(txt).textContent = `${fmt.format(value)} / ${fmt.format(goal)}`;
+      const pct = Math.max(0, Math.min(100, (value/goal)*100));
+      document.getElementById(bar).style.width = pct + '%';
+    });
+  }
+
+  function renderTax() {
+    const t = totals();
+    const entity = document.getElementById('entity').value;
+    const filing = document.getElementById('filing').value;
+    const other = Number(document.getElementById('otherIncome').value) || 0;
+    const stateRate = (Number(document.getElementById('stateRate').value) || 0)/100;
+
+    let tax = 0;
+    let note = '';
+    if (t.netProfit <= 0) {
+      tax = 0;
+      note = '<b>No reserve required from this profit level.</b> The business is at or below break-even on this tracker. You may still owe tax on other income.';
+    } else if (entity === 'soleprop') {
+      const se = seTax(t.netProfit, filing);
+      const taxable = Math.max(0, (t.netProfit + other) - STD[filing] - (se.base * 0.5));
+      const fed = computeFederal(taxable, filing);
+      const state = t.netProfit * stateRate;
+      tax = se.total + fed + state;
+      note = '<b>Sole prop / single-member LLC:</b> profit flows to the owner\'s personal return. This reserve includes self-employment tax, federal income tax, and your chosen state estimate.';
+    } else if (entity === 'scorp') {
+      const taxable = Math.max(0, (t.netProfit + other) - STD[filing]);
+      const fed = computeFederal(taxable, filing);
+      const state = t.netProfit * stateRate;
+      tax = fed + state;
+      note = '<b>S-Corp:</b> W-2 owner salary should be handled in payroll. Profit distributions are not subject to self-employment tax here.';
+    } else {
+      const corp = t.netProfit * 0.21;
+      const state = t.netProfit * stateRate;
+      tax = corp + state;
+      note = '<b>C-Corp:</b> this uses a flat 21% federal corporate tax estimate plus your state reserve. Owner salary/dividends are taxed separately.';
+    }
+
+    setText('taxProfit', fmt.format(t.netProfit));
+    setText('taxReserve', fmt.format(tax));
+    setText('quarterly', fmt.format(tax/4));
+    document.getElementById('taxNote').innerHTML = note;
+  }
+
+  function renderAll() {
+    const t = totals();
+
+    setText('txRevenue', fmt.format(t.txRevenue));
+    setText('txExpense', fmt.format(t.txExpense));
+    setText('txNet', fmt.format(t.txRevenue - t.txExpense));
+    setText('w2Total', fmt.format(t.w2));
+    setText('n1099Total', fmt.format(t.n1099));
+    setText('payrollTax', fmt.format(t.employerTax));
+    setText('payrollCost', fmt.format(t.payrollCost));
+
+    setText('invOpen', t.pendingCount);
+    setText('invOverdue', t.overdueCount);
+    setText('invBalance', fmt.format(t.invoiceOutstanding));
+    setText('statPending', t.pendingCount);
+
+    renderDashboard();
+    renderTax();
+    renderQBStatus();
+    renderTransactions();
+    renderPayroll();
+    renderInvoices();
+    renderClients();
+    renderEvents();
+    renderDashboard();
+    drawMixChart();
+    drawProjectionChart();
+    drawGaugeChart();
+  }
+
+  // Calculators
+  function calcRevenue() {
+    const loads = Number(document.getElementById('loads').value)||0;
+    const avg = Number(document.getElementById('avg').value)||0;
+    const growth = Number(document.getElementById('growth').value)||0;
+    const months = Number(document.getElementById('months').value)||1;
+    const current = loads * avg;
+    const future = current * Math.pow(1 + growth/100, months);
+    const run = current * 12;
+    setText('vLoads', loads);
+    setText('vAvg', fmt.format(avg));
+    setText('vGrowth', growth + '%');
+    setText('vMonths', months + ' months');
+    setText('monthsLabel', months);
+    setText('revNow', fmt.format(current));
+    setText('revFuture', fmt.format(future));
+    setText('revRun', fmt.format(run));
+    document.getElementById('revCallout').innerHTML = `<b>Revenue logic:</b> Multiply current loads by average revenue per load, then layer in expected growth for a simple planning view.`;
+  }
+
+  function calcROI() {
+    const hourly = Number(document.getElementById('hourly').value)||0;
+    const toolCost = Number(document.getElementById('toolCost').value)||0;
+    const h1 = Number(document.getElementById('h1').value)||0;
+    const h2 = Number(document.getElementById('h2').value)||0;
+    const h3 = Number(document.getElementById('h3').value)||0;
+    const reduce = Number(document.getElementById('reduce').value)||0;
+    const cashBenefit = Number(document.getElementById('cashBenefit').value)||0;
+
+    setText('vHourly', fmt.format(hourly));
+    setText('vToolCost', fmt.format(toolCost));
+    setText('vH1', h1 + ' hrs');
+    setText('vH2', h2 + ' hrs');
+    setText('vH3', h3 + ' hrs');
+    setText('vReduce', reduce + '%');
+    setText('vCashBenefit', fmt.format(cashBenefit) + ' / mo');
+
+    const weekly = h1 + h2 + h3;
+    const monthHours = weekly * 4.33;
+    const saved = monthHours * (reduce/100);
+    const timeValue = saved * hourly;
+    const totalBenefit = timeValue + cashBenefit;
+    const net = totalBenefit - toolCost;
+    const mult = toolCost > 0 ? totalBenefit / toolCost : 0;
+    setText('roiHours', saved.toFixed(1));
+    setText('timeValue', fmt.format(timeValue));
+    setText('netBenefit', fmt.format(net));
+    setText('returnMult', mult.toFixed(1) + '×');
+    setText('annualBenefit', fmt.format(net * 12));
+    const roiCallout = document.getElementById('roiCallout');
+    roiCallout.className = 'callout' + (net < 0 ? ' warncall' : '');
+    roiCallout.innerHTML = net < 0
+      ? '<b>ROI note:</b> The tool budget is running ahead of the time saved. Start with the biggest bottleneck first, then expand.'
+      : `<b>ROI note:</b> At these numbers, the tools pay for themselves and free up roughly ${saved.toFixed(1)} hours a month.`;
+  }
+
+  function calcCommission() {
+    const rev = Number(document.getElementById('commRev').value)||0;
+    const rate = Number(document.getElementById('commRate').value)||0;
+    const bonus = Number(document.getElementById('bonus').value)||0;
+    const deals = Number(document.getElementById('deals').value)||1;
+    setText('vCommRev', fmt.format(rev));
+    setText('vCommRate', rate + '%');
+    setText('vBonus', fmt.format(bonus));
+    setText('vDeals', deals);
+    const total = (rev * rate/100) + (bonus * deals);
+    const net = rev - total;
+    setText('commTotal', fmt.format(total));
+    setText('commPerDeal', fmt.format(total / deals));
+    setText('commNet', fmt.format(net));
+  }
+
+  function calcSavings() {
+    const exp = Number(document.getElementById('exp').value)||0;
+    const months = Number(document.getElementById('reserveMonths').value)||1;
+    const saved = Number(document.getElementById('saved').value)||0;
+    const timeline = Number(document.getElementById('timeline').value)||1;
+    const goal = exp * months;
+    const needed = Math.max(0, goal - saved);
+    const monthly = needed / timeline;
+    setText('vExp', fmt.format(exp));
+    setText('vReserveMonths', months + ' months');
+    setText('vSaved', fmt.format(saved));
+    setText('vTimeline', timeline + ' months');
+    setText('reserveGoal', fmt.format(goal));
+    setText('reserveNeeded', fmt.format(needed));
+    setText('setAside', fmt.format(monthly));
+  }
+
+  // Input events
+  ['loads','avg','growth','months'].forEach(id => document.getElementById(id).addEventListener('input', () => { calcRevenue(); drawProjectionChart(); renderDashboard(); }));
+  ['hourly','toolCost','h1','h2','h3','reduce','cashBenefit'].forEach(id => document.getElementById(id).addEventListener('input', () => { calcROI(); renderDashboard(); drawGaugeChart(); }));
+  ['commRev','commRate','bonus','deals'].forEach(id => document.getElementById(id).addEventListener('input', calcCommission));
+  ['exp','reserveMonths','saved','timeline'].forEach(id => document.getElementById(id).addEventListener('input', calcSavings));
+  ['entity','filing','otherIncome','stateRate'].forEach(id => document.getElementById(id).addEventListener('input', () => { renderTax(); drawGaugeChart(); renderDashboard(); }));
+  ['goalRevenue','goalProfit','goalCollections','goalTax'].forEach(id => document.getElementById(id).addEventListener('input', updateGoals));
+
+  // Tabs
+  document.querySelectorAll('.navbtn').forEach(btn => btn.addEventListener('click', () => {
+    document.querySelectorAll('.navbtn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+    setTimeout(() => { drawMixChart(); drawProjectionChart(); drawGaugeChart(); }, 30);
+  }));
+  const calcTabs = document.querySelectorAll('#panel-calculators .subtab');
+  calcTabs.forEach(btn => btn.addEventListener('click', () => {
+    calcTabs.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('#panel-calculators .subpanel').forEach(p => p.classList.remove('active'));
+    document.getElementById('calc-' + btn.dataset.calctab).classList.add('active');
+    setTimeout(() => { drawMixChart(); drawProjectionChart(); drawGaugeChart(); }, 30);
+  }));
+
+  // Tracker inputs
+  let activeTxType = 'income';
+  const txIncomeBtn = document.getElementById('txIncomeBtn');
+  const txExpenseBtn = document.getElementById('txExpenseBtn');
+  txIncomeBtn.addEventListener('click', () => {
+    activeTxType = 'income';
+    txIncomeBtn.classList.add('active');
+    txExpenseBtn.classList.remove('active');
+  });
+  txExpenseBtn.addEventListener('click', () => {
+    activeTxType = 'expense';
+    txExpenseBtn.classList.add('active');
+    txIncomeBtn.classList.remove('active');
+  });
+  document.getElementById('txAddBtn').addEventListener('click', () => {
+    const date = document.getElementById('txDate').value || today();
+    const desc = document.getElementById('txDesc').value.trim();
+    const cat = document.getElementById('txCat').value.trim() || 'Uncategorized';
+    const amt = Number(document.getElementById('txAmt').value);
+    if (!desc || !amt || amt <= 0) return;
+    state.transactions.push({ id: Date.now(), date, desc, cat, type: activeTxType, amt: Math.abs(amt) });
+    document.getElementById('txDesc').value = '';
+    document.getElementById('txCat').value = '';
+    document.getElementById('txAmt').value = '';
+    save(); renderAll();
+  });
+
+  document.getElementById('prAddBtn').addEventListener('click', () => {
+    const date = document.getElementById('prDate').value || today();
+    const name = document.getElementById('prName').value.trim();
+    const amt = Number(document.getElementById('prAmt').value);
+    const type = document.getElementById('prType').value;
+    if (!name || !amt || amt <= 0) return;
+    state.payroll.push({ id: Date.now(), date, name, type, amt: Math.abs(amt) });
+    document.getElementById('prName').value = '';
+    document.getElementById('prAmt').value = '';
+    save(); renderAll();
+  });
+
+  document.getElementById('addInvoiceBtn').addEventListener('click', () => {
+    const client = document.getElementById('invClient').value.trim();
+    const num = document.getElementById('invNum').value.trim();
+    const amt = Number(document.getElementById('invAmt').value);
+    const due = document.getElementById('invDue').value || today();
+    const status = document.getElementById('invStatus').value;
+    const notes = document.getElementById('invNotes').value.trim();
+    if (!client || !num || !amt || amt <= 0) return;
+    state.invoices.push({ id: Date.now(), client, num, amt: Math.abs(amt), due, status, notes });
+    document.getElementById('invClient').value = '';
+    document.getElementById('invNum').value = '';
+    document.getElementById('invAmt').value = '';
+    document.getElementById('invNotes').value = '';
+    save(); renderAll();
+  });
+
+  document.getElementById('addClientBtn').addEventListener('click', () => {
+    const name = document.getElementById('clName').value.trim();
+    const contact = document.getElementById('clContact').value.trim();
+    const last = document.getElementById('clLast').value || today();
+    const next = document.getElementById('clNext').value || today();
+    const balance = Number(document.getElementById('clBalance').value) || 0;
+    const status = document.getElementById('clStatus').value;
+    const notes = document.getElementById('clNotes').value.trim();
+    if (!name || !contact) return;
+    state.clients.push({ id: Date.now(), name, contact, last, next, balance, status, notes });
+    document.getElementById('clName').value = '';
+    document.getElementById('clContact').value = '';
+    document.getElementById('clNotes').value = '';
+    document.getElementById('clBalance').value = '';
+    save(); renderAll();
+  });
+
+  document.getElementById('addEventBtn').addEventListener('click', () => {
+    const date = document.getElementById('eventDate').value || today();
+    const type = document.getElementById('eventType').value;
+    const title = document.getElementById('eventTitle').value.trim();
+    if (!title) return;
+    state.events.push({ id: Date.now(), date, type, title });
+    document.getElementById('eventTitle').value = '';
+    save(); renderAll();
+  });
+
+  function exportCSV(rows, filename) {
+    if (!rows.length) return alert('Nothing to export yet.');
+    const headers = Object.keys(rows[0]);
+    const csv = [headers.join(',')].concat(rows.map(r => headers.map(h => `"${String(r[h]).replace(/"/g,'""')}"`).join(','))).join('\n');
+    const blob = new Blob([csv], {type:'text/csv'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }
+  document.getElementById('exportTxBtn').addEventListener('click', () => exportCSV(state.transactions.map(t => ({
+    Date:t.date, Description:t.desc, Category:t.cat, Type:t.type, Amount:t.amt
+  })), 'reyes-transactions.csv'));
+  document.getElementById('exportPrBtn').addEventListener('click', () => exportCSV(state.payroll.map(p => ({
+    Date:p.date, Name:p.name, Type:p.type, GrossAmount:p.amt
+  })), 'reyes-payroll.csv'));
+  document.getElementById('qbSyncBtn')?.addEventListener('click', () => {
+    pushQBLog({ action: 'Sample invoices, expenses, and payroll totals staged for QuickBooks sync.' });
+  });
+  document.getElementById('qbImportBtn')?.addEventListener('click', () => {
+    pushQBLog({ action: 'QuickBooks import reviewed for invoices and expense entries.' });
+  });
+  document.getElementById('qbMapBtn')?.addEventListener('click', () => {
+    const flow = document.getElementById('qbFlow');
+    if (flow) {
+      flow.innerHTML = 'Invoice #, Client name, Amount, Due date, and Status map into QuickBooks invoice fields.<br><br>Expense categories map into the chart of accounts.<br><br>Payroll totals map into accounting summaries for month-end reconciliation.';
+    }
+    pushQBLog({ action: 'Field mapping preview opened for invoices, expenses, and payroll.' });
+  });
+
+  document.getElementById('exportInvBtn').addEventListener('click', () => exportCSV(state.invoices.map(i => ({
+    Client:i.client, Invoice:i.num, Amount:i.amt, DueDate:i.due, Status:i.status, Notes:i.notes || ''
+  })), 'reyes-invoices.csv'));
+  document.getElementById('exportClientBtn').addEventListener('click', () => exportCSV(state.clients.map(c => ({
+    Client:c.name, Contact:c.contact, LastContact:c.last, NextFollowUp:c.next, Balance:c.balance, Status:c.status, Notes:c.notes || ''
+  })), 'reyes-clients.csv'));
+
+  function initDates() {
+    document.getElementById('txDate').value = today();
+    document.getElementById('prDate').value = today();
+    document.getElementById('invDue').value = today();
+    document.getElementById('clLast').value = today();
+    document.getElementById('clNext').value = today();
+    document.getElementById('eventDate').value = today();
+    document.getElementById('prType').value = 'W-2';
+  }
+
+  load();
+  initDates();
+  calcRevenue();
+  calcROI();
+  calcCommission();
+  calcSavings();
+  renderAll();
+  renderQBStatus();
+  window.addEventListener('resize', () => { drawMixChart(); drawProjectionChart(); drawGaugeChart(); });
+
+  // expose delete buttons
+  window.deleteTx = id => { state.transactions = state.transactions.filter(t => t.id !== id); save(); renderAll(); };
+  window.deletePr = id => { state.payroll = state.payroll.filter(p => p.id !== id); save(); renderAll(); };
+  window.deleteInv = id => { state.invoices = state.invoices.filter(i => i.id !== id); save(); renderAll(); };
+  window.deleteCl = id => { state.clients = state.clients.filter(c => c.id !== id); save(); renderAll(); };
+</script>
+</body>
+</html>
